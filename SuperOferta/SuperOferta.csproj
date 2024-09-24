@@ -7,9 +7,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Core\" />
-    <Folder Include="Infrastructure\" />
-    <Folder Include="Presentation\" />
+    <Compile Remove="Core\**" />
+    <Compile Remove="Infrastructure\**" />
+    <Compile Remove="NewFolder\**" />
+    <Compile Remove="Presentation\**" />
+    <Content Remove="Core\**" />
+    <Content Remove="Infrastructure\**" />
+    <Content Remove="NewFolder\**" />
+    <Content Remove="Presentation\**" />
+    <EmbeddedResource Remove="Core\**" />
+    <EmbeddedResource Remove="Infrastructure\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <EmbeddedResource Remove="Presentation\**" />
+    <None Remove="Core\**" />
+    <None Remove="Infrastructure\**" />
+    <None Remove="NewFolder\**" />
+    <None Remove="Presentation\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="NewFolder1\" />
   </ItemGroup>
 
 </Project>

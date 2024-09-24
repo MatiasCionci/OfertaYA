@@ -15,6 +15,13 @@
             this.apellido = apellido;
             this.fechaNacimiento = fechaNacimiento;
             this.aniosDeExperiencia = aniosDeExperiencia;
+
+
         }
+        public Profesor() { }
+        public string getNombre()
+        {
+            return this.nombre; }
+
     }
 }

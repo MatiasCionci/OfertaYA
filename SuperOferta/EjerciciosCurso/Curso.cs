@@ -6,7 +6,7 @@ namespace SuperOferta.EjerciciosLibros
     {
         private string nombre;
         private int maxAlumno;
-        private Profesor profesor;
+        private Profesor? profesor;
         private List<Alumno> alumnoList = new List<Alumno>();
 
         public Curso(string nombre, int maxAlumno)
@@ -28,10 +28,7 @@ namespace SuperOferta.EjerciciosLibros
         {
             this.profesor = profesor;
         }
-        public Profesor getProfesor()
-        {
-            return this.profesor;
-        }
+        public int Profesor { get; set; }
     }
 }
 

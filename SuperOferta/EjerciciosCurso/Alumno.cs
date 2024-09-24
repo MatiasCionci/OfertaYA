@@ -16,5 +16,6 @@
             this.fechaNacimiento = fechaNacimiento;
             this.siTrabaja = siTrabaja;
         }
+        public int Nombre { get; set; }
     }
 }

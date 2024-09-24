@@ -1,24 +1,33 @@
 ﻿@page "/"
+@rendermode InteractiveServer
 @using SuperOferta.EjerciciosCurso
 @using SuperOferta.EjerciciosLibros
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
-<h1>@curso1.getNombre</h1>
-Welcome to your new app.
-@code{
-    Alumno alumno1 = new Alumno(34513962, "Matias", "Cionci", new DateOnly(1989, 5, 28), true);
-    Alumno alumno2 = new Alumno(34513962, "Marcus", "Cionci", new DateOnly(2001, 12, 6), false);
-    List<Alumno> alumnos = new List<Alumno>();
-    Profesor profesor = new Profesor(34323234, "Martin", "CapaBlanca", new DateOnly(1985, 8, 9), 25);
-    Curso curso1 = new Curso(".Net", 30);
+<p role="status">Current count: @titulo</p>
 
-    public void imprimir()
-    {
+<button class="btn btn-primary" @onclick="Imprimir">Click me</button>
+
+@code{
+    private Alumno alumno1 = new Alumno(34513962, "Matias", "Cionci", new DateOnly(1989, 5, 28), true);
+    private Alumno alumno2 = new Alumno(34513962, "Marcus", "Cionci", new DateOnly(2001, 12, 6), false);
+    private List<Alumno> alumnos = new List<Alumno>();
+    private Profesor profesor = new Profesor(34323234, "Martin", "CapaBlanca", new DateOnly(1985, 8, 9), 25);
+    private Curso curso1 = new Curso(".Net", 30);
+    private String titulo = "primero";
+    private void Imprimir()
+    {  
+        curso1.agregarAlumno(alumno2);
+        curso1.agregarAlumno(alumno1);
         curso1.setProfesor(profesor);
-        curso1.agregarAlumno(alumno1);
-        curso1.agregarAlumno(alumno1);
-        
-    }
+
+        titulo = titulo +"ka"+curso1.getNombre()+profesor.getNombre();
+
+        }
+     
+   
 }
+
+Welcome to your new app.

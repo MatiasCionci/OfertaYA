@@ -1,10 +1,16 @@
 using SuperOferta.Components;
+using SuperOferta.Data;
+using SuperOferta.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+builder.Services.AddDbContext<SupermercadoContext>();
+builder.Services.AddScoped<ISupermercadoService,SupermercadoService>();
+
+
 
 var app = builder.Build();
 

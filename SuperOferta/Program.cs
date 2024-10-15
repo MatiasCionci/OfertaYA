@@ -1,13 +1,18 @@
+using Microsoft.EntityFrameworkCore;
 using SuperOferta.Components;
 using SuperOferta.Data;
 using SuperOferta.Models;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
-builder.Services.AddDbContext<SupermercadoContext>();
+builder.Services.AddDbContext<SupermercadoContext>(options =>
+{
+    options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Supermercados;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+});
 builder.Services.AddScoped<ISupermercadoService,SupermercadoService>();
 
 

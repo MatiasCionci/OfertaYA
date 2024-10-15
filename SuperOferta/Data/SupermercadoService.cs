@@ -29,14 +29,29 @@ namespace SuperOferta.Data
 
 
 
-        public Task<bool> insertSupermercado(Supermercado supermercado)
+        public async Task<bool> insertSupermercado(Supermercado supermercado)
         {
-            throw new NotImplementedException();
+            _context.Supermercados.Add(supermercado);
+            return await _context.SaveChangesAsync() > 0;
+
         }
 
-        public Task<bool> updateSupermercado(Supermercado supermercado)
+        public async Task<bool> SaveSupermercado(Supermercado supercado)
         {
-            throw new NotImplementedException();
+            if (supercado.Id > 0)
+            {
+                return await updateSupermercado(supercado);
+            }
+            else
+            {
+                return await insertSupermercado(supercado);
+            }
+        }
+
+        public async Task<bool> updateSupermercado(Supermercado supermercado)
+        {
+            _context.Entry(supermercado).State=EntityState.Modified;
+            return await _context.SaveChangesAsync() > 0;
         }
 
         async Task<Supermercado> ISupermercadoService.GetSupermercadoById(int id)

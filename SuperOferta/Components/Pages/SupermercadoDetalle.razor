@@ -1,0 +1,51 @@
+﻿@page "/supermercadodetalle"
+@inject ISupermercadoService SupermercadoService
+@rendermode InteractiveServer
+
+<h1>SupermercadoDetalle</h1>
+
+      <p role="status">Current count: @titulo</p>
+
+            <input class="form-control col-sm-4" type="text" @bind-value="supermercado.SupermercadoName" />
+            <input class="form-control col-sm-4" type="text" @bind-value="supermercado.Direccion" />     
+       
+          
+
+       
+              
+              
+                <button class="btn btn-primary" @onclick="SaveSupermercado">Save</button>
+                <button class="btn btn-primary" @onclick="Imprimir">Click me</button>
+                <input type="button" value="Cancel"/>
+         
+            
+
+
+
+
+
+@code {
+    private Supermercado supermercado = new Supermercado();
+    private String titulo = "primero";
+    protected  async Task SaveSupermercado()
+    {
+        try
+        {
+            await SupermercadoService.SaveSupermercado(supermercado);
+            titulo = titulo + supermercado.SupermercadoName;
+            
+        }
+        catch
+        {
+            titulo = titulo + "error";
+        }
+       
+
+    }
+    
+    private void Imprimir()
+    {
+        titulo = titulo + "ka";
+    }
+
+}

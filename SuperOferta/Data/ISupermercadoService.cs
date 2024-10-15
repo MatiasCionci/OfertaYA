@@ -5,10 +5,11 @@ namespace SuperOferta.Data
     public interface ISupermercadoService
     {
 
-        Task<IEnumerable<Models.Supermercado>> GetAllSupermercados();
-        Task<Supermercado> GetSupermercadoById(int id);
-        Task<bool> insertSupermercado(Supermercado supermercado);
-        Task<bool> updateSupermercado(Supermercado supermercado);
-        Task<bool> deleteSupermercadoById(int id);
+       public Task<IEnumerable<Models.Supermercado>> GetAllSupermercados();
+       public Task<Supermercado> GetSupermercadoById(int id);
+       public Task<bool> insertSupermercado(Supermercado supermercado);
+       public Task<bool> updateSupermercado(Supermercado supermercado);
+       public  Task<bool> deleteSupermercadoById(int id);
+        public Task<bool> SaveSupermercado(Supermercado supercado);
     }
 }

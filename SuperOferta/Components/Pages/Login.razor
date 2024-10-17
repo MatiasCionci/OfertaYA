@@ -1,6 +1,6 @@
 ﻿@page "/login"
-
-
+@using SuperOferta.Components.Layout
+@using SuperOferta.Models
 <head>
 	<title>Login V3</title>
 	<meta charset="UTF-8">
@@ -28,8 +28,9 @@
 	<link rel="stylesheet" type="text/css" href="Login_v3/css/main.css">
 	<!--===============================================================================================-->
 </head>
+<MenuComponenteLogin MenuI="MenuInicial" ></MenuComponenteLogin>
 <body>
-
+	
 	<div class="limiter">
 		<div class="container-login100" style="background-image: url('Login_v3/images/bg-01.jpg');">
 			<div class="wrap-login100">
@@ -98,5 +99,5 @@
 </body>
 
 @code {
-
+	Menu MenuInicial= new("uno", "dos");
 }

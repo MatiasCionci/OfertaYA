@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SuperOferta.Components;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using SuperOferta.Data;
 using SuperOferta.Models;
 
@@ -14,6 +16,21 @@ builder.Services.AddDbContext<SupermercadoContext>(options =>
     options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Supermercados;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
 });
 builder.Services.AddScoped<ISupermercadoService,SupermercadoService>();
+builder.Services.AddIdentity<Cliente, MyRol>(options =>
+{
+    options.Password.RequireDigit= true;
+    options.Password.RequireLowercase= true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 8;
+    //
+    options.SignIn.RequireConfirmedEmail = false;
+    //intentos para bloquear
+    options.Lockout.AllowedForNewUsers = true;
+    options.Lockout.MaxFailedAccessAttempts = 5;
+
+})
+    .AddDefaultTokenProviders()
+    .AddEntityFrameworkStores<SupermercadoContext>();
 
 
 
@@ -32,6 +49,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
+app.MapGroup("/identity").MapIdentityApi<IdentityUser>();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 

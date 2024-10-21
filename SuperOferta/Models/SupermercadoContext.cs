@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace SuperOferta.Models
 {
-    public class SupermercadoContext : DbContext
+    public class SupermercadoContext : IdentityDbContext<Cliente,MyRol,String>
     {
         public DbSet<Supermercado> Supermercados { get; set; }
         public DbSet<Producto> Productos { get; set; }

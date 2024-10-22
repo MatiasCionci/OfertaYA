@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace SuperOferta.Models
 {
-    public class SupermercadoContext : IdentityDbContext<Cliente,MyRol,String>
+    public class SupermercadoContext : IdentityDbContext
     {
         public DbSet<Supermercado> Supermercados { get; set; }
         public DbSet<Producto> Productos { get; set; }
@@ -12,10 +13,7 @@ namespace SuperOferta.Models
 
         public SupermercadoContext(DbContextOptions<SupermercadoContext> options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
+        
 
     }
 }

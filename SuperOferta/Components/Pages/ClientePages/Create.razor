@@ -1,0 +1,57 @@
+﻿@page "/clientes/create"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+
+
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Cliente</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Cliente" OnValidSubmit="AddCliente" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" />
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre:</label> 
+                <InputText id="nombre" @bind-Value="Cliente.Nombre" class="form-control" /> 
+                <ValidationMessage For="() => Cliente.Nombre" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="apellido" class="form-label">Apellido:</label> 
+                <InputText id="apellido" @bind-Value="Cliente.Apellido" class="form-control" /> 
+                <ValidationMessage For="() => Cliente.Apellido" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Direccion:</label> 
+                <InputText id="direccion" @bind-Value="Cliente.Direccion" class="form-control" /> 
+                <ValidationMessage For="() => Cliente.Direccion" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/clientes">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Cliente Cliente { get; set; } = new();
+   
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddCliente()
+    {
+     
+      //using var context = DbFactory.CreateDbContext();
+       context.Clientes.Add(Cliente);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/clientes");
+    }
+}

@@ -1,0 +1,99 @@
+﻿@page "/clientes/edit"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Cliente</h2>
+<hr />
+@if (Cliente is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Cliente" OnValidSubmit="UpdateCliente" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="Cliente.Id" value="@Cliente.Id" />
+                <div class="mb-3">
+                    <label for="nombre" class="form-label">Nombre:</label>
+                    <InputText id="nombre" @bind-Value="Cliente.Nombre" class="form-control" />
+                    <ValidationMessage For="() => Cliente.Nombre" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="apellido" class="form-label">Apellido:</label>
+                    <InputText id="apellido" @bind-Value="Cliente.Apellido" class="form-control" />
+                    <ValidationMessage For="() => Cliente.Apellido" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="direccion" class="form-label">Direccion:</label>
+                    <InputText id="direccion" @bind-Value="Cliente.Direccion" class="form-control" />
+                    <ValidationMessage For="() => Cliente.Direccion" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/clientes">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+  
+    [SupplyParameterFromForm]
+    private Cliente? Cliente { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+      
+        Cliente ??= await context.Clientes.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Cliente is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateCliente()
+    {
+       
+        context.Attach(Cliente!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ClienteExists(Cliente!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/clientes");
+    }
+
+    private bool ClienteExists(int id)
+    {
+ 
+        return context.Clientes.Any(e => e.Id == id);
+    }
+}

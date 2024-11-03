@@ -1,0 +1,8 @@
+﻿@page "/authCliente"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles ="Admin")]
+
+<h3>Auth</h3>
+<AuthorizeView>
+    hello @context.User.Identity?.Name!
+</AuthorizeView>

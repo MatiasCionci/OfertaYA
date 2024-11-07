@@ -24,6 +24,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<ISupermercadoService,SupermercadoService>();
 
+builder.Services.AddScoped<ServiceRol>();
 builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddScoped<IdentityUserAccessor>();
@@ -47,28 +48,6 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, IdentityNoOpEmailSender>();
-/**
- * builder.Services.AddIdentity<Cliente, MyRol>()
-    .AddDefaultTokenProviders()
-    .AddEntityFrameworkStores<SupermercadoContext>();
-
-builder.Services.AddIdentity<Cliente, IdentityRole>(options =>
-{
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 8;
-    //
-    options.SignIn.RequireConfirmedEmail = false;
-    //intentos para bloquear
-    options.Lockout.AllowedForNewUsers = true;
-    options.Lockout.MaxFailedAccessAttempts = 5;
-
-})
-    .AddEntityFrameworkStores<SupermercadoContext>()
-    .AddDefaultTokenProviders();
- */
-
 
 
 
@@ -76,6 +55,24 @@ var app = builder.Build();
 //builder.Services.AddRazorPages();
 // Configure the HTTP request pipeline.
 
+using (var scope = app.Services.CreateScope())
+{
+  
+    string[] roles = ["Admin", "Cliente", "Partner"];
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+ 
+    foreach (var role in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(role))
+        {
+            IdentityRole roleRole = new IdentityRole(role);
+            await roleManager.CreateAsync(roleRole);
+        }
+    }
+   
+     
+}
+//
 
 if (!app.Environment.IsDevelopment())
 {

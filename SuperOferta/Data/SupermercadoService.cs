@@ -58,5 +58,6 @@ namespace SuperOferta.Data
         {
             return await _context.Supermercados.FindAsync(id);
         }
+   
     }
 }

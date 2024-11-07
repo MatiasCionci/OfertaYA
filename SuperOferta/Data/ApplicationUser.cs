@@ -4,5 +4,6 @@ namespace SuperOferta.Data
 {
     public class ApplicationUser:IdentityUser
     {
+        
     }
 }

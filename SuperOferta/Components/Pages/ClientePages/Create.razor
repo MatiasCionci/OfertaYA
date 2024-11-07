@@ -2,8 +2,7 @@
 @using Microsoft.EntityFrameworkCore
 @using SuperOferta.Models
 @inject SupermercadoContext context
-
-
+@inject ServiceRol Servicerol
 @inject NavigationManager NavigationManager
 
 <PageTitle>Create</PageTitle>
@@ -44,14 +43,32 @@
 @code {
     [SupplyParameterFromForm]
     private Cliente Cliente { get; set; } = new();
-   
+
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddCliente()
     {
-     
-      //using var context = DbFactory.CreateDbContext();
-       context.Clientes.Add(Cliente);
+
+        //using var context = DbFactory.CreateDbContext();
+        context.Clientes.Add(Cliente);
+
+
         await context.SaveChangesAsync();
+
+
+        Roles roles = new();
+        roles.Name = "Cliente";
+        Cliente clienteConId = await context.Clientes.FirstOrDefaultAsync(p => p.Direccion == Cliente.Direccion);
+        roles.Id = clienteConId.Id;
+        try
+        {
+            Servicerol.insertRol(roles);
+
+        }
+        catch
+        {
+          
+        }
+     
         NavigationManager.NavigateTo("/clientes");
     }
 }

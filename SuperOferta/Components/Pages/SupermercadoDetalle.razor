@@ -1,6 +1,15 @@
 ﻿@page "/supermercadodetalle"
 @inject ISupermercadoService SupermercadoService
+@using Microsoft.AspNetCore.Identity
 @rendermode InteractiveServer
+@inject UserManager<IdentityUser> UserManager
+@inject IUserStore<IdentityUser> UserStore
+@inject SignInManager<IdentityUser> SignInManager
+@inject IEmailSender<IdentityUser> EmailSender
+
+@inject NavigationManager NavigationManager
+
+
 
 <h1>SupermercadoDetalle</h1>
 
@@ -33,19 +42,59 @@
         {
             await SupermercadoService.SaveSupermercado(supermercado);
             titulo = titulo + supermercado.SupermercadoName;
-            
+
         }
         catch
         {
             titulo = titulo + "error";
         }
-       
+
 
     }
-    
-    private void Imprimir()
+
+    public async Task  Imprimir()
     {
-        titulo = titulo + "ka";
+        var user = CreateUser();
+
+        await UserStore.SetUserNameAsync(user,"cioncimatias23@gmail.com", CancellationToken.None);
+        var emailStore = GetEmailStore();
+        await emailStore.SetEmailAsync(user, "cioncimatias23@gmail.com", CancellationToken.None);
+        var result = await UserManager.CreateAsync(user, "AQAAAAIAAYagAAAAEOwFZjdGLq1L56LQ556lnW+sfZCDqToufTg5qadojm8+t5mj5SZWgUCbyXHaLl7hLQ==");
+        var userId = await UserManager.GetUserIdAsync(user);
+        //  var user2=   await UserManager.FindByIdAsync("1");
+        var userEmail = await UserManager.FindByEmailAsync("cioncimatias23@gmail.com");
+        var roles=    await UserManager.GetRolesAsync(user);
+        if (roles != null)
+        {
+            titulo = titulo + "ka"+userEmail.UserName+userId+userEmail.ConcurrencyStamp;   
+        }
+        else
+        {
+            titulo = titulo + "nulo roles";
+        }
+       
+    }
+     private IdentityUser CreateUser()
+    {
+        try
+        {
+          
+            return Activator.CreateInstance<IdentityUser>();
+        }
+        catch
+        {
+            throw new InvalidOperationException($"Can't create an instance of '{nameof(IdentityUser)}'. " +
+                $"Ensure that '{nameof(IdentityUser)}' is not an abstract class and has a parameterless constructor.");
+        }
+    }
+
+    private IUserEmailStore<IdentityUser> GetEmailStore()
+    {
+        if (!UserManager.SupportsUserEmail)
+        {
+            throw new NotSupportedException("The default UI requires a user store with email support.");
+        }
+        return (IUserEmailStore<IdentityUser>)UserStore;
     }
 
 }

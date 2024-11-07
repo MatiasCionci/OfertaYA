@@ -12,8 +12,8 @@ using SuperOferta.Models;
 namespace SuperOferta.Migrations
 {
     [DbContext(typeof(SupermercadoContext))]
-    [Migration("20241102070932_rsa")]
-    partial class rsa
+    [Migration("20241106191355_Autenti")]
+    partial class Autenti
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -279,6 +279,22 @@ namespace SuperOferta.Migrations
                     b.HasIndex("SupermercadoId");
 
                     b.ToTable("Productos");
+                });
+
+            modelBuilder.Entity("SuperOferta.Models.Roles", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roless");
                 });
 
             modelBuilder.Entity("SuperOferta.Models.Supermercado", b =>

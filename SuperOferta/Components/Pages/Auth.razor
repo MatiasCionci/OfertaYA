@@ -1,8 +1,12 @@
 ﻿@page "/authCliente"
+@using SuperOferta.Components.Account.Shared
 @using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles ="Admin")]
+@attribute [Authorize(Roles ="Partner")]
 
-<h3>Auth</h3>
+<NotAuthorized>
+    <button class="btn btn-primary">Click me</button>
+</NotAuthorized>
 <AuthorizeView>
+    <h3>Auth</h3>
     hello @context.User.Identity?.Name!
 </AuthorizeView>

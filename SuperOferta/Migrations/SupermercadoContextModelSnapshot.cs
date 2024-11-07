@@ -278,6 +278,22 @@ namespace SuperOferta.Migrations
                     b.ToTable("Productos");
                 });
 
+            modelBuilder.Entity("SuperOferta.Models.Roles", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roless");
+                });
+
             modelBuilder.Entity("SuperOferta.Models.Supermercado", b =>
                 {
                     b.Property<int>("Id")

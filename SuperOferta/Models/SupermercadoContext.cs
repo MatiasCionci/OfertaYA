@@ -11,6 +11,8 @@ namespace SuperOferta.Models
 
         public DbSet<Cliente> Clientes { get; set; }
 
+        public DbSet<Roles> Roless { get; set; }
+
         public SupermercadoContext(DbContextOptions<SupermercadoContext> options) : base(options) { }
 
         

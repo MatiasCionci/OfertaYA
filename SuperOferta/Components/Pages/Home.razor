@@ -1,5 +1,6 @@
 ﻿@page "/"
 @rendermode InteractiveServer
+@inject NavigationManager NavigationManager
 
 <!DOCTYPE html>
 <html>
@@ -47,7 +48,7 @@
         <a href="#team">Our Team</a>
         <a href="#testimonial">Testimonial</a>
         <a href="#contact">Contact Us</a>
-        <NavLink class="nav-link" href="login">
+        <NavLink class="nav-link" href="account/login">
             <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Login
         </NavLink>
     </div>

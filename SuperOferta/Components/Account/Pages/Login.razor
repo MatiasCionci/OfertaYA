@@ -1,5 +1,6 @@
 ﻿@page "/Account/Login"
-
+@rendermode InteractiveServer
+@inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
@@ -10,16 +11,51 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 
-<PageTitle>Log in</PageTitle>
 
-<h1>Log in</h1>
+<head>
+    <title>Login V3</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" href="Login_v3/images/icons/favicon.ico" />
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="Login_v3/css/util.css">
+    <link rel="stylesheet" type="text/css" href="Login_v3/css/main.css">
+    <!--===============================================================================================-->
+</head>
+
+
+
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100" style="background-image: url('Login_v3/images/bg-01.jpg');">
+			<div class="wrap-login100">
+
+                <h1>Log in</h1>
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <section>
             <StatusMessage Message="@errorMessage" />
-            <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
+            <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login" class="class="login100-form validate-form">
                 <DataAnnotationsValidator />
-                <h2>Use a local account to log in.</h2>
+                
                 <hr />
                 <ValidationSummary class="text-danger" role="alert" />
                 <div class="form-floating mb-3">
@@ -55,15 +91,36 @@
             </EditForm>
         </section>
     </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to log in.</h3>
-            <hr />
-            <ExternalLoginPicker />
-        </section>
+    <div class="col-md-2 col-md-offset-2">
+     
     </div>
 </div>
 
+
+</div>
+        </div>
+    </div>
+
+
+<div id="dropDownSelect1"></div>
+
+<!--===============================================================================================-->
+<script src="Login_v3/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+<script src="Login_v3/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+<script src="Login_v3/vendor/bootstrap/js/popper.js"></script>
+<script src="Login_v3/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+<script src="Login_v3/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<script src="Login_v3/vendor/daterangepicker/moment.min.js"></script>
+<script src="Login_v3/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+<script src="Login_v3/vendor/countdowntime/countdowntime.js"></script>
+<!--===============================================================================================-->
+<script src="Login_v3/js/main.js"></script>
+</body>
 @code {
     private string? errorMessage;
 

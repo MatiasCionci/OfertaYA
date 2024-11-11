@@ -62,17 +62,22 @@
         var result = await UserManager.CreateAsync(user, "AQAAAAIAAYagAAAAEOwFZjdGLq1L56LQ556lnW+sfZCDqToufTg5qadojm8+t5mj5SZWgUCbyXHaLl7hLQ==");
         var userId = await UserManager.GetUserIdAsync(user);
         //  var user2=   await UserManager.FindByIdAsync("1");
-        var userEmail = await UserManager.FindByEmailAsync("cioncimatias23@gmail.com");
-        var roles=    await UserManager.GetRolesAsync(user);
-        if (roles != null)
-        {
-            titulo = titulo + "ka"+userEmail.UserName+userId+userEmail.ConcurrencyStamp;   
-        }
-        else
-        {
-            titulo = titulo + "nulo roles";
-        }
-       
+        var userEmail = await UserManager.FindByEmailAsync("partner23@gmail.com");
+        var roles=    await UserManager.GetRolesAsync(userEmail);
+        /*
+           *
+           *    if (roles != null)
+            {
+               titulo = titulo + "ka"+userEmail.UserName+userId+userEmail.ConcurrencyStamp;
+            }
+            else
+            {
+                titulo = titulo + "nulo roles";
+            }
+           */
+
+
+        titulo = titulo+ roles;
     }
      private IdentityUser CreateUser()
     {

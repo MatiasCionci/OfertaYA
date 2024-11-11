@@ -1,9 +1,7 @@
-﻿@page "/"
-@using SuperOferta.Components.Account.Pages.Manage
+﻿@page "/Account/"
 @using SuperOferta.Components.Account.Pages
 @rendermode InteractiveServer
 @inject NavigationManager NavigationManager
-
 
 
 
@@ -55,15 +53,13 @@
         <a href="#contact">Contact Us</a>
         <a href="Account/RegisterCliente">RegistrarCliente</a>
         <a href="Account/LoginOfertaYA">Login</a>
-        <a href="loginya">counter</a>
-        <button class="btn btn-primary" @onclick="redireccionar">intenti1</button>
         <li class="nav-item">
             <NavLink class="nav-link" href="Account/Manage/PersonalData">Personal data</NavLink>
         </li>
-      
-      
-      
-      
+        <button @onclick="redireccionar">intenti1</button>
+
+
+
     </div>
     <!-- header -->
     <header>
@@ -80,7 +76,7 @@
                         <div class="full">
                             <div class="center-desk">
                                 <div class="logo">
-                                    <a href="index.html"><img src="homeInicio/maker/images/logo.png" alt="#" /></a>
+                                    <a href="Account/LoginOfertaYA"><img src="homeInicio/maker/images/logo.png" alt="#" /></a>
                                 </div>
                             </div>
                         </div>
@@ -180,7 +176,6 @@
                         </div>
                         <div class="col-md-12">
                             <div class="about_img">
-                               
                             </div>
                         </div>
                     </div>
@@ -479,7 +474,7 @@
                                 <li><a href="#"><i class="fa fa-map-marker" aria-hidden="true"></i></a><br> Direccion del establecimiento</li>
                                 <li>
                                     <a href="#"><i class="fa fa-phone" aria-hidden="true"></i></a><br>
-                                     1130437119
+                                    1130437119
                                 </li>
                                 <li><a href="#"><i class="fa fa-envelope" aria-hidden="true"></i></a><br> cioncimatias2@gmail.com</li>
                             </ul>
@@ -506,7 +501,6 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                       
                         </div>
                     </div>
                 </div>
@@ -555,9 +549,8 @@
 </html>
 
 @code {
-    public async Task redireccionar()
+    protected void redireccionar()
     {
-        NavigationManager.NavigateTo("Account/LoginRedirect");
+        NavigationManager.NavigateTo("Account/LoginOfertaYA");
     }
-
-    }
+}

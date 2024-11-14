@@ -140,6 +140,8 @@
 </body>
 @code {
     private string? errorMessage;
+    private List<string> roles = new List<string>();
+    string? rolesString = "";
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -167,7 +169,19 @@
         if (result.Succeeded)
         {
             Logger.LogInformation("User logged in.");
-            RedirectManager.RedirectTo(ReturnUrl);
+            var userEmail = await UserManager.FindByEmailAsync(Input.Email);
+            roles = (await UserManager.GetRolesAsync(userEmail)).ToList();
+            rolesString = roles.First();
+            if (rolesString == "Partner")
+            {
+                RedirectManager.RedirectTo("/panelpartner");
+            }
+            if (rolesString == "Cliente")
+            {
+                RedirectManager.RedirectTo("/panelcliente");
+            }
+
+
         }
         else if (result.RequiresTwoFactor)
         {

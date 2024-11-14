@@ -72,6 +72,7 @@
         var userEmail = await UserManager.FindByEmailAsync("partner23@gmail.com");
    
      roles=    (await UserManager.GetRolesAsync(userEmail)).ToList();
+
         /*
            *
            *    if (roles != null)

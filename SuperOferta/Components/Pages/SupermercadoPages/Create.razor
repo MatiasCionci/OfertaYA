@@ -1,0 +1,62 @@
+﻿@page "/supermercados/create"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>Supermercado</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="Supermercado" OnValidSubmit="AddSupermercado" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <div class="mb-3">
+                <label for="supermercadoname" class="form-label">SupermercadoName:</label> 
+                <InputText id="supermercadoname" @bind-Value="Supermercado.SupermercadoName" class="form-control" /> 
+                <ValidationMessage For="() => Supermercado.SupermercadoName" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="direccion" class="form-label">Direccion:</label> 
+                <InputText id="direccion" @bind-Value="Supermercado.Direccion" class="form-control" /> 
+                <ValidationMessage For="() => Supermercado.Direccion" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="correo" class="form-label">Correo:</label> 
+                <InputText id="correo" @bind-Value="Supermercado.Correo" class="form-control" /> 
+                <ValidationMessage For="() => Supermercado.Correo" class="text-danger" /> 
+            </div>        
+            <div class="mb-3">
+                <label for="password" class="form-label">Password:</label> 
+                <InputText id="password" @bind-Value="Supermercado.Password" class="form-control" /> 
+                <ValidationMessage For="() => Supermercado.Password" class="text-danger" /> 
+            </div>        
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/supermercados">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Supermercado Supermercado { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddSupermercado()
+    {
+        context.Supermercados.Add(Supermercado);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/supermercados");
+    }
+}

@@ -1,0 +1,107 @@
+﻿@page "/supermercados/edit"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Supermercado</h2>
+<hr />
+@if (Supermercado is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Supermercado" OnValidSubmit="UpdateSupermercado" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Supermercado.Id" value="@Supermercado.Id" />
+                <div class="mb-3">
+                    <label for="supermercadoname" class="form-label">SupermercadoName:</label>
+                    <InputText id="supermercadoname" @bind-Value="Supermercado.SupermercadoName" class="form-control" />
+                    <ValidationMessage For="() => Supermercado.SupermercadoName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="direccion" class="form-label">Direccion:</label>
+                    <InputText id="direccion" @bind-Value="Supermercado.Direccion" class="form-control" />
+                    <ValidationMessage For="() => Supermercado.Direccion" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="correo" class="form-label">Correo:</label>
+                    <InputText id="correo" @bind-Value="Supermercado.Correo" class="form-control" />
+                    <ValidationMessage For="() => Supermercado.Correo" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password:</label>
+                    <InputText id="password" @bind-Value="Supermercado.Password" class="form-control" />
+                    <ValidationMessage For="() => Supermercado.Password" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/supermercados">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Supermercado? Supermercado { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+     
+        Supermercado ??= await context.Supermercados.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Supermercado is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateSupermercado()
+    {
+ 
+        context.Attach(Supermercado!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!SupermercadoExists(Supermercado!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/supermercados");
+    }
+
+    private bool SupermercadoExists(int id)
+    {
+       
+        return context.Supermercados.Any(e => e.Id == id);
+    }
+}

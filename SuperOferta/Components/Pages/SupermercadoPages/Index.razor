@@ -1,0 +1,40 @@
+﻿@page "/supermercados"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using SuperOferta.Models
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="supermercados/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Supermercados">
+    <PropertyColumn Property="supermercado => supermercado.SupermercadoName" />
+    <PropertyColumn Property="supermercado => supermercado.Direccion" />
+    <PropertyColumn Property="supermercado => supermercado.Correo" />
+    <PropertyColumn Property="supermercado => supermercado.Password" />
+
+    <TemplateColumn Context="supermercado">
+        <a href="@($"supermercados/edit?id={supermercado.Id}")">Edit</a> |
+        <a href="@($"supermercados/details?id={supermercado.Id}")">Details</a> |
+        <a href="@($"supermercados/delete?id={supermercado.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+ 
+
+  
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

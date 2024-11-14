@@ -1,0 +1,62 @@
+﻿@page "/productos/details"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Producto</h2>
+    <hr />
+    @if (producto is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">ProductoId</dt>
+            <dd class="col-sm-10">@producto.ProductoId</dd>
+            <dt class="col-sm-2">ProductoName</dt>
+            <dd class="col-sm-10">@producto.ProductoName</dd>
+            <dt class="col-sm-2">FechaCaducidad</dt>
+            <dd class="col-sm-10">@producto.FechaCaducidad</dd>
+            <dt class="col-sm-2">Descripcion</dt>
+            <dd class="col-sm-10">@producto.Descripcion</dd>
+            <dt class="col-sm-2">categoria</dt>
+            <dd class="col-sm-10">@producto.categoria</dd>
+            <dt class="col-sm-2">imagen</dt>
+            <dd class="col-sm-10">@producto.imagen</dd>
+            <dt class="col-sm-2">SupermercadoId</dt>
+            <dd class="col-sm-10">@producto.SupermercadoId</dd>
+        </dl>
+        <div>
+            <a href="@($"/productos/edit?id={producto.Id}")">Edit</a> |
+            <a href="@($"/productos")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Producto? producto;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+     
+        producto = await context.Productos.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (producto is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

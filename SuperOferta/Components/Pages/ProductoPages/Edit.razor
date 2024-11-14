@@ -1,0 +1,123 @@
+﻿@page "/productos/edit"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>Producto</h2>
+<hr />
+@if (Producto is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="Producto" OnValidSubmit="UpdateProducto" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary role="alert"/>
+                <input type="hidden" name="Producto.Id" value="@Producto.Id" />
+                <div class="mb-3">
+                    <label for="productoid" class="form-label">ProductoId:</label>
+                    <InputNumber id="productoid" @bind-Value="Producto.ProductoId" class="form-control" />
+                    <ValidationMessage For="() => Producto.ProductoId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="productoname" class="form-label">ProductoName:</label>
+                    <InputText id="productoname" @bind-Value="Producto.ProductoName" class="form-control" />
+                    <ValidationMessage For="() => Producto.ProductoName" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="fechacaducidad" class="form-label">FechaCaducidad:</label>
+                    <InputDate id="fechacaducidad" @bind-Value="Producto.FechaCaducidad" class="form-control" />
+                    <ValidationMessage For="() => Producto.FechaCaducidad" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="descripcion" class="form-label">Descripcion:</label>
+                    <InputText id="descripcion" @bind-Value="Producto.Descripcion" class="form-control" />
+                    <ValidationMessage For="() => Producto.Descripcion" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="categoria" class="form-label">categoria:</label>
+                    <InputText id="categoria" @bind-Value="Producto.categoria" class="form-control" />
+                    <ValidationMessage For="() => Producto.categoria" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="imagen" class="form-label">imagen:</label>
+                    <InputText id="imagen" @bind-Value="Producto.imagen" class="form-control" />
+                    <ValidationMessage For="() => Producto.imagen" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="supermercadoid" class="form-label">SupermercadoId:</label>
+                    <InputNumber id="supermercadoid" @bind-Value="Producto.SupermercadoId" class="form-control" />
+                    <ValidationMessage For="() => Producto.SupermercadoId" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/productos">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Producto? Producto { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+      
+        Producto ??= await context.Productos.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (Producto is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateProducto()
+    {
+      
+        context.Attach(Producto!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!ProductoExists(Producto!.Id))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/productos");
+    }
+
+    private bool ProductoExists(int id)
+    {
+      
+        return context.Productos.Any(e => e.Id == id);
+    }
+}

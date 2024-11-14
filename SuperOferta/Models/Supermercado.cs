@@ -12,7 +12,7 @@ namespace SuperOferta.Models
         
         public string? SupermercadoName { get; set; }
 
-        public bool? EsPublico { get; set; }
+        public bool EsPublico = true;
 
         public string? Direccion { get; set; }
 

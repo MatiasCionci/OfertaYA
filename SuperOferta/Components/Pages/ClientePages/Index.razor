@@ -5,7 +5,9 @@
 @using SuperOferta.Models
 @inject SupermercadoContext context
 @implements IAsyncDisposable
-
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Cliente")]
 
 <PageTitle>Index</PageTitle>
 

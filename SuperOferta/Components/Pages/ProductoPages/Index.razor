@@ -1,0 +1,44 @@
+﻿@page "/productos"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.AspNetCore.Components.QuickGrid
+@using SuperOferta.Models
+@using SuperOferta.Models
+@implements IAsyncDisposable
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <a href="productos/create">Create New</a>
+</p>
+
+<QuickGrid Class="table" Items="context.Productos">
+    <PropertyColumn Property="producto => producto.ProductoId" />
+    <PropertyColumn Property="producto => producto.ProductoName" />
+    <PropertyColumn Property="producto => producto.FechaCaducidad" />
+    <PropertyColumn Property="producto => producto.Descripcion" />
+    <PropertyColumn Property="producto => producto.categoria" />
+    <PropertyColumn Property="producto => producto.imagen" />
+    <PropertyColumn Property="producto => producto.SupermercadoId" />
+
+    <TemplateColumn Context="producto">
+        <a href="@($"productos/edit?id={producto.Id}")">Edit</a> |
+        <a href="@($"productos/details?id={producto.Id}")">Details</a> |
+        <a href="@($"productos/delete?id={producto.Id}")">Delete</a>
+    </TemplateColumn>
+</QuickGrid>
+
+@code {
+    
+
+
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

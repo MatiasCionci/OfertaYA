@@ -1,0 +1,55 @@
+﻿@page "/supermercados/details"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>Supermercado</h2>
+    <hr />
+    @if (supermercado is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">SupermercadoName</dt>
+            <dd class="col-sm-10">@supermercado.SupermercadoName</dd>
+            <dt class="col-sm-2">Direccion</dt>
+            <dd class="col-sm-10">@supermercado.Direccion</dd>
+            <dt class="col-sm-2">Correo</dt>
+            <dd class="col-sm-10">@supermercado.Correo</dd>
+            <dt class="col-sm-2">Password</dt>
+            <dd class="col-sm-10">@supermercado.Password</dd>
+        </dl>
+        <div>
+            <a href="@($"/supermercados/edit?id={supermercado.Id}")">Edit</a> |
+            <a href="@($"/supermercados")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private Supermercado? supermercado;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    
+        supermercado = await context.Supermercados.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (supermercado is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

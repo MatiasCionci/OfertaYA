@@ -3,7 +3,9 @@
 @using SuperOferta.Models
 @inject SupermercadoContext context
 @inject NavigationManager NavigationManager
-
+@using SuperOferta.Components.Pages.Account.Shared
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Cliente")]
 <PageTitle>Edit</PageTitle>
 
 <h1>Edit</h1>

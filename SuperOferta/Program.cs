@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using SuperOferta.Data;
 using SuperOferta.Models;
 using Microsoft.AspNetCore.Components.Authorization;
-using SuperOferta.Components.Account;
+using SuperOferta.Components.Pages.Account;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -54,8 +54,14 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, IdentityNoOpEmailSender>();
 
 
-
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 var app = builder.Build();
+app.MapGet("/", context =>
+{
+    context.Response.Redirect("/home");
+    return Task.CompletedTask;
+});
 //builder.Services.AddRazorPages();
 // Configure the HTTP request pipeline.
 

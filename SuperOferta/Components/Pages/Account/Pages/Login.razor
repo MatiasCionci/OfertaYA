@@ -1,14 +1,31 @@
 ﻿@page "/Account/Login"
-@rendermode InteractiveServer
+
+
+
+@using System.ComponentModel.DataAnnotations
+@using System.Text
+@using System.Text.Encodings.Web
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+@using SuperOferta.Models
+
+@inject UserManager<IdentityUser> UserManager
+@inject IUserStore<IdentityUser> UserStore
+@inject SignInManager<IdentityUser> SignInManager
+@inject IEmailSender<IdentityUser> EmailSender
+
+
+
+
 @inject NavigationManager NavigationManager
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using SuperOferta.Models
 
-@inject SignInManager<IdentityUser> SignInManager
+
 @inject ILogger<Login> Logger
-@inject NavigationManager NavigationManager
+
 @inject IdentityRedirectManager RedirectManager
 
 

@@ -1,7 +1,7 @@
 ﻿using SuperOferta.Models;
 using Microsoft.AspNetCore.Identity;
 
-namespace SuperOferta.Components.Account
+namespace SuperOferta.Components.Pages.Account
 {
     internal sealed class IdentityUserAccessor(UserManager<IdentityUser> userManager, IdentityRedirectManager redirectManager)
     {

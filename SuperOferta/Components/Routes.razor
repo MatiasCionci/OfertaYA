@@ -1,9 +1,16 @@
-﻿@using SuperOferta.Components.Account.Shared
+﻿@using SuperOferta.Components.Pages.Account.Shared
 
 <Router AppAssembly="typeof(Program).Assembly">
     <Found Context="routeData">
-    
-        <RouteView RouteData="routeData"  />
+     <AuthorizeRouteView RouteData="routeData" >
+            <NotAuthorized>
+                <RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeRouteView>
+        
         <FocusOnNavigate RouteData="routeData" Selector="h1" />
     </Found>
+       <NotFound>
+        <RedirectToPage href="/home" />
+    </NotFound>
 </Router>

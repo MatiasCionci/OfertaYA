@@ -1,8 +1,8 @@
-﻿@page "/"
-@using SuperOferta.Components.Account.Pages.Manage
-@using SuperOferta.Components.Account.Pages
-@rendermode InteractiveServer
-@inject NavigationManager NavigationManager
+﻿@page "/home"
+@using SuperOferta.Components.Pages.Account.Pages.Manage
+@using SuperOferta.Components.Pages.Account.Pages
+
+@inject NavigationManager _navigationManager
 
 
 
@@ -41,9 +41,7 @@
 <!-- body -->
 <body class="main-layout">
     <!-- loader  -->
-    <div class="loader_bg">
-        <div class="loader"><img src="homeInicio/maker/images/loading.gif" alt="#" /></div>
-    </div>
+ 
     <!-- end loader -->
     <div id="mySidepanel" class="sidepanel">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
@@ -54,13 +52,15 @@
         <a href="#testimonial">Testimonial</a>
         <a href="#contact">Contact Us</a>
         <a href="Account/RegisterCliente">RegistrarCliente</a>
-        <a href="Account/LoginOfertaYA">Login</a>
-        <a href="loginya">counter</a>
-        <button class="btn btn-primary" @onclick="redireccionar">intenti1</button>
-        <li class="nav-item">
-            <NavLink class="nav-link" href="Account/Manage/PersonalData">Personal data</NavLink>
-        </li>
+        <a href="Account/Login">RegistrarCliente</a>
+        <a href="Account/Login"> <button class="btn btn-primary" @onclick="redireccionar">LoginLink</button></a>
+       
+       
       
+
+        <NavLink class="nav-link" href="Account/Login" Match="NavLinkMatch.All">Personal data</NavLink>
+
+        <button class="btn btn-primary" @onclick="redireccionar">Login</button>
       
       
       
@@ -110,6 +110,7 @@
                         <div class="carousel-caption">
                             <div class="text-bg">
                                 <h1>Oferta YA</h1>
+                               
                                 <span>Market</span>
                                 <a class="read_more" href="#">About Us</a>
                                 <ul class="social_team">
@@ -555,9 +556,11 @@
 </html>
 
 @code {
-    public async Task redireccionar()
+    public void redireccionar()
     {
-        NavigationManager.NavigateTo("Account/LoginRedirect");
+        _navigationManager.NavigateTo("Account/Login");
     }
-
+   
+  
+}
     }

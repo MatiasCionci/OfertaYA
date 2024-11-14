@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using SuperOferta.Components.Account.Pages;
-using SuperOferta.Components.Account.Pages.Manage;
+using SuperOferta.Components.Pages;
+using SuperOferta.Components.Pages.Account.Pages;
+using SuperOferta.Components.Pages.Account.Pages.Manage;
 using SuperOferta.Models;
 
-namespace Microsoft.AspNetCore.Routing
+namespace SuperOferta.Components.Pages.Account
 {
     internal static class IdentityComponentsEndpointRouteBuilderExtensions
     {

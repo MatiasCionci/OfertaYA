@@ -10,6 +10,7 @@ namespace SuperOferta.Models
         public DbSet<Producto> Productos { get; set; }
 
         public DbSet<Cliente> Clientes { get; set; }
+    
 
         public DbSet<Roles> Roless { get; set; }
 

@@ -1,0 +1,63 @@
+﻿@page "/Mapas"
+@inject IJSRuntime JS
+@rendermode InteractiveServer
+
+    <h1>@Titulo</h1>
+   
+
+
+   
+<h3>Mapa</h3>
+
+<button class="btn btn-outline-success" data-toggle="tooltip" title="Exportar" @onclick="Export">Encuentrame</button>
+<div class="qr-code-container">
+    <div class="qr-code" style></div>
+</div>
+    <div id="map" class="map" style="height:500px;width:500px"></div>
+
+    <script>
+        window.GenerarMapa = async () => {
+
+
+
+        var map = L.map('map').setView([-34.748395, -58.323882], 15);
+
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+        L.marker([-34.748395, -58.323882]).addTo(map)
+                .bindPopup('Supermercados')
+                .openPopup();
+        L.marker([-34.743867, -58.322191]).addTo(map)
+            .bindPopup('Supermercados2')
+            .openPopup();
+
+
+        }
+    </script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+@code {
+    string Titulo = "titu";
+    public async Task  Export()
+    {
+        Titulo = Titulo + "pasomapa";
+        try
+        {
+            await JS.InvokeVoidAsync("GenerarMapa");
+            Titulo = Titulo + "pasomapa";
+        }
+        catch
+        {
+            Titulo = "nopaso";
+        }
+
+     
+
+    }
+    //https://forum.bubble.io/t/jspdf-integration/7618
+}
+
+

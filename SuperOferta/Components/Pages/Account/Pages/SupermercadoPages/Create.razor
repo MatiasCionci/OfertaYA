@@ -1,18 +1,23 @@
-﻿@page "/supermercados/create"
+﻿@page "/supermercados/createe"
 @using Microsoft.EntityFrameworkCore
 @using SuperOferta.Models
+@using Microsoft.AspNetCore.Identity
 @inject SupermercadoContext context
 @inject ServiceRol Servicerol
 @inject NavigationManager NavigationManager
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
 @using SuperOferta.Components.Pages.Account.Shared
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = "Partner")]
 
 <PageTitle>Create</PageTitle>
 
-<h1>Create</h1>
+<h1>Bienvenido @username</h1>
 
-<h2>Supermercado</h2>
+<h2>Create Supermercado</h2>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -52,11 +57,28 @@
     [SupplyParameterFromForm]
     private Supermercado Supermercado { get; set; } = new();
 
+    private IdentityUser user = default!;
+    private string? username;
+
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddSupermercado()
     {
         context.Supermercados.Add(Supermercado);
         await context.SaveChangesAsync();
+        user.PhoneNumber = "3";
+       var result= await UserManager.SetPhoneNumberAsync(user,"3");
         NavigationManager.NavigateTo("/supermercados");
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        username = await UserManager.GetUserNameAsync(user);
+
+
     }
 }

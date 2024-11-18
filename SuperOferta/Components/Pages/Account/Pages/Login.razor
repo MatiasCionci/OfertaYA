@@ -174,7 +174,15 @@
             rolesString = roles.First();
             if (rolesString == "Partner")
             {
-                RedirectManager.RedirectTo("/panelpartner");
+                if (userEmail.PhoneNumber == "3")
+                {
+                    RedirectManager.RedirectTo("/panellpartner");
+                }
+                else
+                {
+                    RedirectManager.RedirectTo("/supermercados/createe");
+                }
+               
             }
             if (rolesString == "Cliente")
             {

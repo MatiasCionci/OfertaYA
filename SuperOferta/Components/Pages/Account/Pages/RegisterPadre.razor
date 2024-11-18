@@ -49,9 +49,9 @@
 </div>
 
 @code {
-    
-     [Parameter]
-     public string RolNombre { get; set; }
+
+    [Parameter]
+    public string RolNombre { get; set; }
 
     private IEnumerable<IdentityError>? identityErrors;
 
@@ -102,10 +102,9 @@
 
 
 
-       // await UserManager.AddToRoleAsync(user, "4");
+        // await UserManager.AddToRoleAsync(user, "4");
         await UserManager.AddToRoleAsync(user, $"{RolNombre}");
-     
-
+        
         await SignInManager.SignInAsync(user, isPersistent: false);
 
         RedirectManager.RedirectTo(ReturnUrl);

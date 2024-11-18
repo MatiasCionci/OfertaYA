@@ -1,0 +1,38 @@
+﻿@page "/paneladmin"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+@using SuperOferta.Models
+
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+
+<h3>PanelAdmin </h3>
+<h4>  Bienvenido @username </h4>
+<button>Notificaciones</button>
+
+
+
+
+@code {
+    private IdentityUser user = default!;
+    private string? username;
+
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        username = await UserManager.GetUserNameAsync(user);
+
+        
+
+    }
+
+}

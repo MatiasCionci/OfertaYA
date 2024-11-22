@@ -5,11 +5,6 @@
 @using SuperOferta.Models
 @implements IAsyncDisposable
 @inject SupermercadoContext context
-@inject ServiceRol Servicerol
-@inject NavigationManager NavigationManager
-@using SuperOferta.Components.Pages.Account.Shared
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Partner")]
 
 <PageTitle>Index</PageTitle>
 
@@ -20,13 +15,11 @@
 </p>
 
 <QuickGrid Class="table" Items="context.Productos">
-    <PropertyColumn Property="producto => producto.ProductoId" />
     <PropertyColumn Property="producto => producto.ProductoName" />
     <PropertyColumn Property="producto => producto.FechaCaducidad" />
     <PropertyColumn Property="producto => producto.Descripcion" />
     <PropertyColumn Property="producto => producto.categoria" />
     <PropertyColumn Property="producto => producto.imagen" />
-    <PropertyColumn Property="producto => producto.SupermercadoId" />
 
     <TemplateColumn Context="producto">
         <a href="@($"productos/edit?id={producto.Id}")">Edit</a> |
@@ -36,7 +29,6 @@
 </QuickGrid>
 
 @code {
-    
 
 
 

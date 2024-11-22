@@ -1,0 +1,75 @@
+﻿@page "/paneladmin"
+
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.AspNetCore.Identity
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject NavigationManager NavigationManager
+@inject IdentityRedirectManager RedirectManager
+
+
+
+
+<h3>PanelAdmin </h3>
+<h4>  Bienvenido @username </h4>
+<button>Actualizar todos los productos vencidos</button>
+
+@if (notificaciones == null)
+{
+    <p><em>Loading...</em></p>
+}else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Email</th>
+                <th>Direccion</th>
+                <th></th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var notificacion in notificaciones)
+            {
+                <tr>
+                    <td>@notificacion.EmailPartner</td>
+                    <td>@notificacion.Direccion</td>
+                    <td><a href="/coordenadas/@notificacion.Id.ToString()">Agregar</a></td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+
+
+}
+
+@code {
+    private IdentityUser user = default!;
+    private string? username;
+    private List<NotificacionesAdmin> notificaciones = new();
+
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        notificaciones = context.NotificacionesAdmin.ToList();
+        // var userEmail = await UserManager.FindByEmailAsync(Input.Email);
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        username = await UserManager.GetUserNameAsync(user);
+
+    }
+    protected async Task AgregarCoordenadas()
+    {
+       RedirectManager.RedirectTo("coordenadas");
+     
+    }
+
+}

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SuperOferta.Migrations
 {
     /// <inheritdoc />
-    public partial class Autenti : Migration
+    public partial class producd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -66,6 +66,20 @@ namespace SuperOferta.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NotificacionesAdmin",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmailPartner = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NotificacionesAdmin", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Roless",
                 columns: table => new
                 {
@@ -85,10 +99,12 @@ namespace SuperOferta.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SupermercadoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    EsPublico = table.Column<bool>(type: "bit", nullable: true),
+                    Confirmacion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Correo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Coordenadaxx = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Coordenadayy = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -207,13 +223,12 @@ namespace SuperOferta.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductoId = table.Column<int>(type: "int", nullable: false),
                     ProductoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FechaCaducidad = table.Column<DateOnly>(type: "date", nullable: true),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     categoria = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     imagen = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SupermercadoId = table.Column<int>(type: "int", nullable: false)
+                    SupermercadoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -222,8 +237,7 @@ namespace SuperOferta.Migrations
                         name: "FK_Productos_Supermercados_SupermercadoId",
                         column: x => x.SupermercadoId,
                         principalTable: "Supermercados",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -291,6 +305,9 @@ namespace SuperOferta.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clientes");
+
+            migrationBuilder.DropTable(
+                name: "NotificacionesAdmin");
 
             migrationBuilder.DropTable(
                 name: "Productos");

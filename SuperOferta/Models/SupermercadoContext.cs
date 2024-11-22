@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using SuperOferta.Models;
 
 namespace SuperOferta.Models
 {
@@ -14,7 +15,9 @@ namespace SuperOferta.Models
 
         public DbSet<Roles> Roless { get; set; }
 
+
         public SupermercadoContext(DbContextOptions<SupermercadoContext> options) : base(options) { }
+        public DbSet<SuperOferta.Models.NotificacionesAdmin> NotificacionesAdmin { get; set; } = default!;
 
         
 

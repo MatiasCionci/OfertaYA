@@ -9,10 +9,10 @@ namespace SuperOferta.Models
 
         [DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        
+
         public string? SupermercadoName { get; set; }
 
-        public bool EsPublico = true;
+        public string? Confirmacion { get; set; } = "SI";
 
         public string? Direccion { get; set; }
 
@@ -20,8 +20,11 @@ namespace SuperOferta.Models
 
         public string? Password { get; set; }
 
+        public string? Coordenadaxx { get; set; }
 
-       public List<Producto>? Productos { get; set; }
+        public string? Coordenadayy { get; set; }
+
+        public List<Producto>? Productos { get; set; }= new ();
         
       
        

@@ -1,0 +1,44 @@
+﻿@page "/notificacionesadmins/details"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject NavigationManager NavigationManager
+
+<PageTitle>Details</PageTitle>
+
+<h1>Details</h1>
+
+<div>
+    <h2>NotificacionesAdmin</h2>
+    <hr />
+    @if (notificacionesadmin is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+        </dl>
+        <div>
+            <a href="@($"/notificacionesadmins/edit?id={notificacionesadmin.Id}")">Edit</a> |
+            <a href="@($"/notificacionesadmins")">Back to List</a>
+        </div>
+    }
+</div>
+
+@code {
+    private NotificacionesAdmin? notificacionesadmin;
+
+    [SupplyParameterFromQuery]
+    private int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+    
+        notificacionesadmin = await context.NotificacionesAdmin.FirstOrDefaultAsync(m => m.Id == Id);
+
+        if (notificacionesadmin is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+}

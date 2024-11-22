@@ -1,12 +1,10 @@
-﻿@page "/productos/create"
+﻿@page "/productos/create/{supermercadoId}"
 @using Microsoft.EntityFrameworkCore
 @using SuperOferta.Models
 @inject SupermercadoContext context
-@inject ServiceRol Servicerol
 @inject NavigationManager NavigationManager
-@using SuperOferta.Components.Pages.Account.Shared
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Partner")]
+@inject ISupermercadoService SupermercadoService
+@rendermode InteractiveServer
 <PageTitle>Create</PageTitle>
 
 <h1>Create</h1>
@@ -17,42 +15,47 @@
     <div class="col-md-4">
         <EditForm method="post" Model="Producto" OnValidSubmit="AddProducto" FormName="create" Enhance>
             <DataAnnotationsValidator />
-            <ValidationSummary class="text-danger" role="alert"/>
+            <ValidationSummary class="text-danger" role="alert" />
             <div class="mb-3">
-                <label for="productoid" class="form-label">ProductoId:</label> 
-                <InputNumber id="productoid" @bind-Value="Producto.ProductoId" class="form-control" /> 
-                <ValidationMessage For="() => Producto.ProductoId" class="text-danger" /> 
-            </div>        
+                <label for="productoname" class="form-label">ProductoName:</label>
+                <InputText id="productoname" @bind-Value="Producto.ProductoName" class="form-control" />
+                <ValidationMessage For="() => Producto.ProductoName" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="productoname" class="form-label">ProductoName:</label> 
-                <InputText id="productoname" @bind-Value="Producto.ProductoName" class="form-control" /> 
-                <ValidationMessage For="() => Producto.ProductoName" class="text-danger" /> 
-            </div>        
+                <label for="fechacaducidad" class="form-label">FechaCaducidad:</label>
+                <InputDate id="fechacaducidad" @bind-Value="Producto.FechaCaducidad" class="form-control" />
+                <ValidationMessage For="() => Producto.FechaCaducidad" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="fechacaducidad" class="form-label">FechaCaducidad:</label> 
-                <InputDate id="fechacaducidad" @bind-Value="Producto.FechaCaducidad" class="form-control" /> 
-                <ValidationMessage For="() => Producto.FechaCaducidad" class="text-danger" /> 
-            </div>        
+                <label for="precio" class="form-label">Precio:</label>
+                <InputNumber id="precio" @bind-Value="Producto.Precio" class="form-control" />
+                <ValidationMessage For="() => Producto.Precio" class="text-danger" />
+            </div>
+
             <div class="mb-3">
-                <label for="descripcion" class="form-label">Descripcion:</label> 
-                <InputText id="descripcion" @bind-Value="Producto.Descripcion" class="form-control" /> 
-                <ValidationMessage For="() => Producto.Descripcion" class="text-danger" /> 
-            </div>        
+                <label for="descripcion" class="form-label">Descripcion:</label>
+                <InputText id="descripcion" @bind-Value="Producto.Descripcion" class="form-control" />
+                <ValidationMessage For="() => Producto.Descripcion" class="text-danger" />
+            </div>
             <div class="mb-3">
-                <label for="categoria" class="form-label">categoria:</label> 
-                <InputText id="categoria" @bind-Value="Producto.categoria" class="form-control" /> 
-                <ValidationMessage For="() => Producto.categoria" class="text-danger" /> 
-            </div>        
+                <label for="categoria" class="form-label">categoria:</label>
+
+                <InputSelect id="categorias" @bind-Value="Seleccionada" class="form-control">
+                    <option value="">-- Seleccionar --</option>
+                    @foreach (var opcion in categorias)
+                    {
+                        <option value="@opcion">@opcion</option>
+                    }
+                </InputSelect>
+
+            </div>
+            <p>Opción seleccionada: @Seleccionada</p>
             <div class="mb-3">
-                <label for="imagen" class="form-label">imagen:</label> 
-                <InputText id="imagen" @bind-Value="Producto.imagen" class="form-control" /> 
-                <ValidationMessage For="() => Producto.imagen" class="text-danger" /> 
-            </div>        
-            <div class="mb-3">
-                <label for="supermercadoid" class="form-label">SupermercadoId:</label> 
-                <InputNumber id="supermercadoid" @bind-Value="Producto.SupermercadoId" class="form-control" /> 
-                <ValidationMessage For="() => Producto.SupermercadoId" class="text-danger" /> 
-            </div>        
+                <label for="imagen" class="form-label">imagen:</label>
+                <InputText id="imagen" @bind-Value="Producto.imagen" class="form-control" />
+                <ValidationMessage For="() => Producto.imagen" class="text-danger" />
+            </div>
+
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
     </div>
@@ -63,15 +66,38 @@
 </div>
 
 @code {
+
+    [Parameter]
+    public string? supermercadoId { get; set; }
     [SupplyParameterFromForm]
     private Producto Producto { get; set; } = new();
+
+    public Supermercado? supermercado { get; set; }
+    private List<string> categorias = new();
+    //private List<string> Opciones = new List<string> { "Opción 1", "Opción 2", "Opción 3" };
+    private string Seleccionada;
+
+    protected override async Task OnInitializedAsync()
+    {
+        supermercado = await context.Supermercados.FindAsync(int.Parse(supermercadoId));
+
+        categorias.Add("Gaseosa");
+        categorias.Add("Lacteos");
+        categorias.Add("Cerveza");
+        categorias.Add("Vino");
+        categorias.Add("Carne");
+
+
+    }
 
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddProducto()
     {
-       
-        context.Productos.Add(Producto);
+        Producto.categoria = Seleccionada;
+        supermercado.Productos.Add(Producto);
+        await SupermercadoService.updateSupermercado(supermercado);
         await context.SaveChangesAsync();
-        NavigationManager.NavigateTo("/productos");
+        NavigationManager.NavigateTo("/panellpartner");
+
     }
 }

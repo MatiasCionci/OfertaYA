@@ -242,6 +242,25 @@ namespace SuperOferta.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("SuperOferta.Models.NotificacionesAdmin", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Direccion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmailPartner")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificacionesAdmin");
+                });
+
             modelBuilder.Entity("SuperOferta.Models.Producto", b =>
                 {
                     b.Property<int>("Id")
@@ -256,13 +275,13 @@ namespace SuperOferta.Migrations
                     b.Property<DateOnly?>("FechaCaducidad")
                         .HasColumnType("date");
 
-                    b.Property<int>("ProductoId")
+                    b.Property<int?>("Precio")
                         .HasColumnType("int");
 
                     b.Property<string>("ProductoName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SupermercadoId")
+                    b.Property<int?>("SupermercadoId")
                         .HasColumnType("int");
 
                     b.Property<string>("categoria")
@@ -301,6 +320,15 @@ namespace SuperOferta.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Confirmacion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Coordenadaxx")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Coordenadayy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Correo")
                         .HasColumnType("nvarchar(max)");
@@ -372,13 +400,9 @@ namespace SuperOferta.Migrations
 
             modelBuilder.Entity("SuperOferta.Models.Producto", b =>
                 {
-                    b.HasOne("SuperOferta.Models.Supermercado", "Supermercado")
+                    b.HasOne("SuperOferta.Models.Supermercado", null)
                         .WithMany("Productos")
-                        .HasForeignKey("SupermercadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Supermercado");
+                        .HasForeignKey("SupermercadoId");
                 });
 
             modelBuilder.Entity("SuperOferta.Models.Supermercado", b =>

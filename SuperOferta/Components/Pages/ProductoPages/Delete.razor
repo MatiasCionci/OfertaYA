@@ -2,11 +2,8 @@
 @using Microsoft.EntityFrameworkCore
 @using SuperOferta.Models
 @inject SupermercadoContext context
-@inject ServiceRol Servicerol
 @inject NavigationManager NavigationManager
-@using SuperOferta.Components.Pages.Account.Shared
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = "Partner")]
+
 <PageTitle>Delete</PageTitle>
 
 <h1>Delete</h1>
@@ -20,10 +17,6 @@
         <p><em>Loading...</em></p>
     }
     else {
-        <dl class="row">
-            <dt class="col-sm-2">ProductoId</dt>
-            <dd class="col-sm-10">@producto.ProductoId</dd>
-        </dl>
         <dl class="row">
             <dt class="col-sm-2">ProductoName</dt>
             <dd class="col-sm-10">@producto.ProductoName</dd>
@@ -44,10 +37,6 @@
             <dt class="col-sm-2">imagen</dt>
             <dd class="col-sm-10">@producto.imagen</dd>
         </dl>
-        <dl class="row">
-            <dt class="col-sm-2">SupermercadoId</dt>
-            <dd class="col-sm-10">@producto.SupermercadoId</dd>
-        </dl>
         <EditForm method="post" Model="producto" OnValidSubmit="DeleteProducto" FormName="delete" Enhance>
             <button type="submit" class="btn btn-danger" disabled="@(producto is null)">Delete</button> |
             <a href="/productos">Back to List</a>
@@ -63,7 +52,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
+      
         producto = await context.Productos.FirstOrDefaultAsync(m => m.Id == Id);
 
         if (producto is null)
@@ -74,7 +63,7 @@
 
     private async Task DeleteProducto()
     {
-       
+     
         context.Productos.Remove(producto!);
         await context.SaveChangesAsync();
         NavigationManager.NavigateTo("/productos");

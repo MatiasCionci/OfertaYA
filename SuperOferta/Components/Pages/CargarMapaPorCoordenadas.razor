@@ -1,0 +1,32 @@
+﻿@page "/coodenadasparamapa"
+@inject IJSRuntime Js
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+<h3>CargarMapaPorCoordenadas</h3>
+
+
+
+<input class="form-control col-sm-4" type="text" @bind-value="ubicacionx" />
+<input class="form-control col-sm-4" type="text" @bind-value="ubicaciony" />
+
+
+<h1>@ubicacionx</h1>
+
+<a href="/Mapas/@ubicacionx/@ubicaciony">enviar</a>
+
+<button class="btn btn-primary " @onclick="enviarCoordenadas">Save</button>
+@code {
+    public string? ubicacionx { get; set; } = "";
+    public string? ubicaciony { get; set; } = "";
+
+        protected async Task enviarCoordenadas()
+        {
+           
+              
+                NavigationManager.NavigateTo($"/Mapas?ubicacionx={ubicacionx}");
+
+     
+
+
+        }
+}

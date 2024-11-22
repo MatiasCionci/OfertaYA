@@ -3,19 +3,37 @@
 
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
 @using SuperOferta.Models
-
+@inject SupermercadoContext contexto
 @inject UserManager<IdentityUser> UserManager
 @inject SignInManager<IdentityUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
 
-<h4>  Bienvenido @username </h4>
-<h1>Esperar confirmacion del administrador</h1>
+
+@if (confirmado)
+{
+    <h4>  Bienvenido @username </h4>
+    <h1>Esperar confirmacion del administrador  
+        email
+    </h1>
+}
+else
+{
+
+
+    <a href="/productos/create/@supermercado.Id.ToString()">Agregar Producto</a>
+}
+
+
+
 @code {
     private IdentityUser user = default!;
     private string? username;
-
+    private string? email="";
+    public Supermercado? supermercado { get; set; }
+    private bool confirmado = true;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -26,8 +44,14 @@
     {
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
         username = await UserManager.GetUserNameAsync(user);
+        email = await UserManager.GetEmailAsync(user);
+        supermercado = await contexto.Supermercados.FirstOrDefaultAsync(m => m.Correo == email);
 
-
+        if (supermercado.Confirmacion=="si")
+        {
+            confirmado = false;
+        }
 
     }
+
 }

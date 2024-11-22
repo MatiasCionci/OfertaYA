@@ -1,0 +1,76 @@
+﻿@page "/coordenadas/{notificacionId}"
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+@inject ISupermercadoService SupermercadoService
+@rendermode InteractiveServer
+<h3>CoordenadasPartner</h3>
+<h3>Agregar coordenadas de la direccion @ubicacion</h3>
+
+
+<input class="form-control col-sm-4" type="text" @bind-value="coordenadax"/>
+<input class="form-control col-sm-4" type="text" @bind-value="coordenaday" />
+
+
+
+
+
+
+<button class="btn btn-primary " @onclick="guardarCoordenadas" >Save</button>
+
+@code {
+
+
+
+    [Parameter]
+    public string? notificacionId { get; set; }
+    public NotificacionesAdmin? notificacion{ get; set; }
+
+    public string? coordenadax{ get; set; }
+    public string? coordenaday { get; set; }
+    public Supermercado? supermercado{ get; set; }
+    public string? ubicacion = "";
+    protected override async Task OnInitializedAsync()
+    {
+        notificacion = await context.NotificacionesAdmin.FindAsync(int.Parse(notificacionId));
+
+        supermercado= await context.Supermercados.FirstOrDefaultAsync(m => m.Correo==notificacion.EmailPartner
+        );
+        ubicacion = ubicacion +supermercado.Direccion;
+
+
+        if (supermercado is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+
+    }
+
+    protected async Task guardarCoordenadas()
+    {
+        try
+        {
+            supermercado.Coordenadaxx = coordenadax;
+            supermercado.Coordenadayy = coordenaday;
+            supermercado.Confirmacion="si";
+            await SupermercadoService.updateSupermercado(supermercado);
+           context.NotificacionesAdmin.Remove(notificacion);
+           var resul= await context.SaveChangesAsync() > 0;
+            NavigationManager.NavigateTo("/paneladmin");
+
+        }
+        catch
+        {
+            ubicacion = ubicacion + "error";
+    }
+
+
+    }
+}
+

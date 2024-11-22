@@ -1,0 +1,39 @@
+﻿@page "/notificacionesadmins/create"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@inject SupermercadoContext context
+@inject NavigationManager NavigationManager
+
+<PageTitle>Create</PageTitle>
+
+<h1>Create</h1>
+
+<h2>NotificacionesAdmin</h2>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm method="post" Model="NotificacionesAdmin" OnValidSubmit="AddNotificacionesAdmin" FormName="create" Enhance>
+            <DataAnnotationsValidator />
+            <ValidationSummary class="text-danger" role="alert"/>
+            <button type="submit" class="btn btn-primary">Create</button>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="/notificacionesadmins">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private NotificacionesAdmin NotificacionesAdmin { get; set; } = new();
+
+    // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task AddNotificacionesAdmin()
+    {
+       
+        context.NotificacionesAdmin.Add(NotificacionesAdmin);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/notificacionesadmins");
+    }
+}

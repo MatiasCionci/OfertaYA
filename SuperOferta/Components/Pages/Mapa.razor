@@ -30,15 +30,32 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-        L.marker([ubicacionx,ubicaciony]).addTo(map)
-                .bindPopup('Supermercados')
-                .openPopup();
-        L.marker([-34.743867, -58.322191]).addTo(map)
+       
+        L.marker([-34.749566, -58.321550]).addTo(map)
             .bindPopup('Supermercados2')
             .openPopup();
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLat = position.coords.latitude;
+                var userLng = position.coords.longitude;
+
+                // Agregar un marcador para la ubicación actual del usuario
+                L.marker([userLat, userLng]).addTo(map)
+                    .bindPopup('Estás aquí')
+                    .openPopup();
+
+                L.marker([ubicacionx, ubicaciony]).addTo(map)
+                    .bindPopup('Superm')
+                    .openPopup();
 
 
+                // Centrar el mapa en la ubicación del usuario
+             
+            }
+    );
+    } 
         }
+        
     </script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 
@@ -55,6 +72,7 @@
         {
             await JS.InvokeVoidAsync("GenerarMapa",Ubicacionx,Ubicaciony);
             Titulo = Titulo + "pasomapa";
+           
         }
         catch
         {

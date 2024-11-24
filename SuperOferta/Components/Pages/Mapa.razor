@@ -20,7 +20,12 @@
 
     <script>
         window.GenerarMapa = async (ubicacionx,ubicaciony) => {
+        const coord1 = L.latLng(-34.6037, -58.3816); // Buenos Aires
+        const coord2 = L.latLng(-34.9205, -57.9536); // La Plata
 
+        // Distancia en metros
+        const distancia = coord1.distanceTo(coord2);
+        console.log(`La distancia es: ${(distancia / 1000).toFixed(2)} km`);
 
 
         var map = L.map('map').setView([ubicacionx,ubicaciony], 15);

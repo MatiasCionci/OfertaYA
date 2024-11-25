@@ -1,9 +1,128 @@
 ﻿@page "/panelcliente"
+@using Microsoft.EntityFrameworkCore
+@using SuperOferta.Models
+@using Microsoft.AspNetCore.Identity
+@inject SupermercadoContext context
+@inject ServiceRol Servicerol
+@inject NavigationManager NavigationManager
+@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<IdentityUser> SignInManager
+@inject IdentityUserAccessor UserAccessor
+@inject IdentityRedirectManager RedirectManager
+@using SuperOferta.Components.Pages.Account.Shared
+@rendermode InteractiveServer
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Cliente")]
 <h3>PanelCliente</h3>
 
-<button class="w-100 btn btn-lg btn-primary">Buscar por producto</button>
-<button class="w-100 btn btn-lg btn-primary">Buscar por precio</button>
-<button class="w-100 btn btn-lg btn-primary">Buscar por mas cercano</button>
-@code {
 
+
+<p>Distancia en km</p>
+<input type="number" @bind-value="valorAbuscar" />
+
+<button class="w-100 btn btn-lg btn-primary" @onclick="HabilitarProducto">Buscar por producto</button>
+@if (xproducto)
+{
+    <div class="mb-3">
+        <label>Categoria</label>
+
+        <InputSelect id="categorias" @bind-Value="Seleccionada" class="form-control" @onclick="()=>BuscarXProducto(Seleccionada)">
+            <option value="">-- Seleccionar --</option>
+            @foreach (var opcion in categorias)
+            {
+                <option value="@opcion">@opcion</option>
+            }
+        </InputSelect>
+
+    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Nombre del Supermercado
+                </th>
+                <th>
+                    Direccion
+                </th>
+                <th>
+                    Categoria del Producto
+                </th>
+                <th>
+                    Fecha de Caducidad
+                </th>
+                <th>
+                    Precio
+                </th>
+                <th>
+                    ver en mapa
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var superItem in BusquedaproductosXcategoria)
+            {
+                <tr>
+                    <td>@superItem.SupermercadoName</td>
+                    <td>@superItem.Direccion</td>
+                    <td>@superItem.productos.First().categoria</td>
+                    <td>@superItem.productos.First().FechaCaducidad</td>
+                    <td>@superItem.productos.First().Precio</td>
+                    <td><a href="/Mapas/@superItem.Coordenadaxx/@superItem.Coordenadayy">enviar</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <h2>@Seleccionada</h2>
+}
+
+<button class="w-100 btn btn-lg btn-primary">Buscar por precio</button>
+<button class="w-100 btn btn-lg btn-primary">Ver los mas cercano</button>
+@code {
+    private int valorAbuscar { get; set; } = 0;
+    private List<string> categorias = new();
+    private string? Seleccionada="";
+    private bool xproducto = false;
+    private List<SupermercadosProductosModel> BusquedaproductosXcategoria = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        categorias.Add("Gaseosa");
+        categorias.Add("Lacteos");
+        categorias.Add("Cerveza");
+        categorias.Add("Vino");
+        categorias.Add("Carne");
+
+
+    }
+    private async Task BuscarXProducto(string valor)
+    {
+        //traerme los supermercados,con el precio del producto
+        //ordenados x Valor
+        BusquedaproductosXcategoria = context.Supermercados.Include("Productos").Select(s=> new SupermercadosProductosModel()
+        {
+           productos = s.Productos.Where(p => p.categoria == valor).ToList(),
+           SupermercadoName=s.SupermercadoName,
+           Direccion=s.Direccion,
+           Coordenadaxx=s.Coordenadaxx,
+           Coordenadayy=s.Coordenadayy
+
+
+        }).ToList();
+        BusquedaproductosXcategoria = BusquedaproductosXcategoria.Where(b => b.productos.Count > 0).ToList();
+        Seleccionada =valor;
+    }
+    private async Task HabilitarProducto()
+    {
+        xproducto=true;
+    }
+  
+    private class SupermercadosProductosModel
+    {
+        public string? SupermercadoName { get; set; }
+        public string? Direccion { get; set; } = string.Empty;
+        public string? Coordenadaxx { get; set; } = string.Empty;
+        public string? Coordenadayy { get; set; } = string.Empty;
+        public List<Producto>? productos { get; set; }
+    }
 }

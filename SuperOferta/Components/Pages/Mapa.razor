@@ -36,9 +36,7 @@
             }).addTo(map);
 
        
-        L.marker([-34.749566, -58.321550]).addTo(map)
-            .bindPopup('Supermercados2')
-            .openPopup();
+       
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var userLat = position.coords.latitude;

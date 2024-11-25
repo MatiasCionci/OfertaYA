@@ -6,6 +6,7 @@ using SuperOferta.Data;
 using SuperOferta.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using SuperOferta.Components.Pages.Account;
+using Blazored.LocalStorage;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<SupermercadoContext>(options =>
 {
     options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Supermercados;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
 });
+builder.Services.AddBlazoredLocalStorage();
 
 builder.Services.AddQuickGridEntityFrameworkAdapter();
 

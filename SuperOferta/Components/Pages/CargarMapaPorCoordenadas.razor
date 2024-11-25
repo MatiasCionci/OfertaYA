@@ -1,6 +1,7 @@
 ﻿@page "/coodenadasparamapa"
 @inject IJSRuntime Js
 @inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @rendermode InteractiveServer
 <h3>CargarMapaPorCoordenadas</h3>
 
@@ -12,6 +13,7 @@
 
 <h1>@ubicacionx</h1>
 
+<h2>@producto.ProductoName</h2>
 
 <a href="/Mapas/@ubicacionx/@ubicaciony">enviar</a>
 
@@ -19,10 +21,13 @@
 
 
 @code {
+    [Parameter]
+    public Producto producto { get; set; }
+ 
     public string? ubicacionx { get; set; } = "";
     public string? ubicaciony { get; set; } = "";
+    private bool isLoaded = false;
 
- 
 
     protected async Task enviarCoordenadas()
         {

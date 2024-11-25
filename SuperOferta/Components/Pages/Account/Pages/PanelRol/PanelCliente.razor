@@ -9,16 +9,16 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
 @using SuperOferta.Components.Pages.Account.Shared
 @rendermode InteractiveServer
 @using Microsoft.AspNetCore.Authorization
+
 @attribute [Authorize(Roles = "Cliente")]
 <h3>PanelCliente</h3>
 
 
 
-<p>Distancia en km</p>
-<input type="number" @bind-value="valorAbuscar" />
 
 <button class="w-100 btn btn-lg btn-primary" @onclick="HabilitarProducto">Buscar por producto</button>
 @if (xproducto)
@@ -74,15 +74,30 @@
     </table>
     <h2>@Seleccionada</h2>
 }
+<p>Distancia en km</p>
+<input type="number" @bind-value="valorAbuscar" />
+<button class="w-100 btn btn-lg btn-primary" @onclick="HabilitarXDistancia">Ver los mas cercano</button>
+@if (xdistancia)
+{
 
-<button class="w-100 btn btn-lg btn-primary">Buscar por precio</button>
-<button class="w-100 btn btn-lg btn-primary">Ver los mas cercano</button>
+  
+    <td><a href="/MapasDistancia/@valorAbuscar.ToString()/@cadenaAPasar">enviar</a></td>
+}
+else
+{
+    
+}
+
 @code {
     private int valorAbuscar { get; set; } = 0;
     private List<string> categorias = new();
     private string? Seleccionada="";
     private bool xproducto = false;
+    private bool xdistancia = false;
     private List<SupermercadosProductosModel> BusquedaproductosXcategoria = new();
+
+    private Producto producto = new();
+    private string cadenaAPasar = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -93,6 +108,7 @@
         categorias.Add("Vino");
         categorias.Add("Carne");
 
+        producto.Descripcion = "desripcion paso";
 
     }
     private async Task BuscarXProducto(string valor)
@@ -112,11 +128,31 @@
         BusquedaproductosXcategoria = BusquedaproductosXcategoria.Where(b => b.productos.Count > 0).ToList();
         Seleccionada =valor;
     }
+    private Action ActionBuscar => () => BuscarXdistancia(valorAbuscar);
+
+    private async Task BuscarXdistancia(int valor)
+    {
+        xdistancia = true;
+        generarCadena();
+
+    }
     private async Task HabilitarProducto()
     {
         xproducto=true;
     }
-  
+    private async Task HabilitarXDistancia()
+    { 
+        generarCadena();
+        xproducto = false;
+        xdistancia = true;
+    }
+    private void generarCadena()
+    {
+        foreach(var item in BusquedaproductosXcategoria)
+        {
+            cadenaAPasar = cadenaAPasar+item.Coordenadaxx + "&" + item.Coordenadayy + "&" + item.SupermercadoName + "&";
+        }
+    }
     private class SupermercadosProductosModel
     {
         public string? SupermercadoName { get; set; }

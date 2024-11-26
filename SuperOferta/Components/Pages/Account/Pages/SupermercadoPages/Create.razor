@@ -71,7 +71,7 @@
         NotificacionesAdmin.Direccion = Supermercado.Direccion;
         context.NotificacionesAdmin.Add(NotificacionesAdmin);
         await context.SaveChangesAsync();
-        NavigationManager.NavigateTo("/supermercados");
+        NavigationManager.NavigateTo("/panellpartner");
     }
     protected override async Task OnInitializedAsync()
     {

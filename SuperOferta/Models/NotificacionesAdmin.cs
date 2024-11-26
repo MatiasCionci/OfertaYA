@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public string? EmailPartner { get; set; }
         public string? Direccion { get; set; }
-    }
+
+        public int? validado { get; set; } = 0;    }
 }

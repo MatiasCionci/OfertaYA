@@ -1,5 +1,5 @@
 ﻿@page "/panellpartner"
-<h3>PanelPartner</h3>
+
 
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.AspNetCore.Identity
@@ -12,6 +12,7 @@
 @inject IdentityRedirectManager RedirectManager
 
 
+
 @if (confirmado)
 {
     <h4>  Bienvenido @username </h4>
@@ -21,10 +22,44 @@
 }
 else
 {
-
-
+    <h1>Bienvenido @supermercado.SupermercadoName</h1>
     <a href="/productos/create/@supermercado.Id.ToString()">Agregar Producto</a>
+
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    Nombre del Producto
+                </th>
+
+                <th>
+                    Categoria del Producto
+                </th>
+                <th>
+                    Fecha de Caducidad
+                </th>
+                <th>
+                    Precio
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var producItem in Listproductos)
+            {
+                <tr>
+                    <td>@producItem.ProductoName</td>
+                    <td>@producItem.categoria</td>
+                    <td>@producItem.FechaCaducidad.ToString()</td>
+                    <td>@producItem.Precio</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
 }
+
 
 
 
@@ -34,6 +69,8 @@ else
     private string? email="";
     public Supermercado? supermercado { get; set; }
     private bool confirmado = true;
+    private List<Producto> Listproductos = new();
+    private bool tablaProducto = false;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -45,13 +82,16 @@ else
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
         username = await UserManager.GetUserNameAsync(user);
         email = await UserManager.GetEmailAsync(user);
-        supermercado = await contexto.Supermercados.FirstOrDefaultAsync(m => m.Correo == email);
+        supermercado = await contexto.Supermercados.Include("Productos").FirstOrDefaultAsync(m => m.Correo == email);
 
         if (supermercado.Confirmacion=="si")
         {
             confirmado = false;
         }
-
+        Listproductos = supermercado.Productos;
     }
-
+    private async Task HabilitarProductos()
+    {
+        tablaProducto = true;
+    }
 }

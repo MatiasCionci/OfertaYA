@@ -60,8 +60,9 @@
             supermercado.Coordenadayy = coordenaday;
             supermercado.Confirmacion="si";
             await SupermercadoService.updateSupermercado(supermercado);
-           context.NotificacionesAdmin.Remove(notificacion);
-           var resul= await context.SaveChangesAsync() > 0;
+            notificacion.validado = 1;
+            context.Entry(notificacion).State = EntityState.Modified;
+            var resul= await context.SaveChangesAsync() > 0;
             NavigationManager.NavigateTo("/paneladmin");
 
         }

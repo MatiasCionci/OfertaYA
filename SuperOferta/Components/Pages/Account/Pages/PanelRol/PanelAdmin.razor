@@ -34,12 +34,16 @@
         <tbody>
             @foreach (var notificacion in notificaciones)
             {
-                <tr>
-                    <td>@notificacion.EmailPartner</td>
-                    <td>@notificacion.Direccion</td>
-                    <td><a href="/coordenadas/@notificacion.Id.ToString()">Agregar</a></td>
-                    
-                </tr>
+                @if (notificacion.validado == 0)
+                {
+                    <tr>
+                        <td>@notificacion.EmailPartner</td>
+                        <td>@notificacion.Direccion</td>
+                        <td><a href="/coordenadas/@notificacion.Id.ToString()">Agregar</a></td>
+
+                    </tr>
+                }
+            
             }
         </tbody>
     </table>

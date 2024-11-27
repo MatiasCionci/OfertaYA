@@ -25,6 +25,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddScoped<ISupermercadoService,SupermercadoService>();
+builder.Services.AddScoped<ProductoService, ProductoService>();
 
 builder.Services.AddScoped<ServiceRol>();
 builder.Services.AddCascadingAuthenticationState();

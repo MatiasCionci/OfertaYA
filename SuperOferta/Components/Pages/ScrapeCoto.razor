@@ -1,0 +1,18 @@
+﻿@page "/scrape-coto"
+@inject WebScrapingService ScrapingService
+@rendermode InteractiveServer
+
+<h3>Productos de Coto</h3>
+<button @onclick="ScrapeCotoData">Hacer Scraping</button>
+
+<pre>@scrapedData</pre>
+
+@code {
+    private string scrapedData;
+
+    private async Task ScrapeCotoData()
+    {
+        var url = "https://api.cotodigital.com.ar/sitios/cdigi/productos/"; // URL de ejemplo de Coto
+        scrapedData = await ScrapingService.GetProductDataAsync(url);
+    }
+}

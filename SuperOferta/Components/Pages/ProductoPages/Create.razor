@@ -38,18 +38,38 @@
                 <ValidationMessage For="() => Producto.Descripcion" class="text-danger" />
             </div>
             <div class="mb-3">
-                <label for="categoria" class="form-label">categoria:</label>
-
-                <InputSelect id="categorias" @bind-Value="Seleccionada" class="form-control">
-                    <option value="">-- Seleccionar --</option>
-                    @foreach (var opcion in categorias)
+                <label for="categoria" class="form-label">Categoría:</label>
+                <InputSelect id="categoria" @bind-Value="CategoriaSeleccionada" @oninput="OnCategoriaChanged" class="form-control">
+                    <option value="" >-- Seleccionar --</option>
+                    @foreach (var categoria in categorias.Keys)
                     {
-                        <option value="@opcion">@opcion</option>
+                        <option value="@categoria" >@categoria</option>
                     }
+                    
                 </InputSelect>
+               
+                    <label for="subcategoria" class="form-label mt-3">Subcategoría:</label>
+                    <InputSelect id="subcategoria" @bind-Value="SubcategoriaSeleccionada" class="form-control">
+                        <option value="">-- Seleccionar --</option>
+                        
+                    @foreach (var subcategoria in subcategorias)
+                        {
+                            <option value="@subcategoria">@subcategoria</option>
+                        }
 
-            </div>
-            <p>Opción seleccionada: @Seleccionada</p>
+                    </InputSelect>
+
+        
+                </div>
+                <p class="mt-3">
+                    <strong>Categoría seleccionada:</strong> @CategoriaSeleccionada<br />
+                    
+                </p>
+          
+            <p class="mt-3">
+               
+                <strong>Subcategoría seleccionada:</strong> @SubcategoriaSeleccionada
+            </p>
             <div class="mb-3">
                 <label for="imagen" class="form-label">imagen:</label>
                 <InputText id="imagen" @bind-Value="Producto.imagen" class="form-control" />
@@ -73,27 +93,63 @@
     private Producto Producto { get; set; } = new();
 
     public Supermercado? supermercado { get; set; }
-    private List<string> categorias = new();
+
     //private List<string> Opciones = new List<string> { "Opción 1", "Opción 2", "Opción 3" };
-    private string Seleccionada;
+    public Dictionary<string, List<string>> categorias = new();
+
+    public string CategoriaSeleccionada { get; set; } = "";
+    public string SubcategoriaSeleccionada { get; set; } = "";
+    public List<string> subcategorias { get; set; } = new List<string>();
+    public bool categoriaCargado { get; set; } = false;
+
 
     protected override async Task OnInitializedAsync()
     {
         supermercado = await context.Supermercados.FindAsync(int.Parse(supermercadoId));
+        categorias.Add("Almacen", new List<string> { "Arroz", "Harina", "Azúcar", "Conservas" });
+        categorias.Add("Bebidas", new List<string> { "Agua", "Jugos", "Refrescos", "Cerveza" });
+        categorias.Add("Frescos", new List<string> { "Carnes", "Pescados", "Verduras", "Frutas" });
+        categorias.Add("Congelados", new List<string> { "Pizzas", "Helados", "Verduras Congeladas", "Comida Rápida" });
+        categorias.Add("Limpieza", new List<string> { "Detergentes", "Desinfectantes", "Limpiadores", "Bolsas de basura" });
+        categorias.Add("Perfumeria", new List<string> { "Shampoo", "Crema hidratante", "Fragancias", "Desodorantes" });
+        categorias.Add("Electro", new List<string> { "Televisores", "Celulares", "Computadoras", "Electrodomésticos" });
+        categorias.Add("Textil", new List<string> { "Ropa", "Zapatos", "Accesorios", "Bolsos" });
+        categorias.Add("Hogar", new List<string> { "Muebles", "Decoración", "Lámparas", "Accesorios de cocina" });
+        categorias.Add("Aire Libre", new List<string> { "Carpas", "Sillas de camping", "Bicicletas", "Accesorios de pesca" });
 
-        categorias.Add("Gaseosa");
-        categorias.Add("Lacteos");
-        categorias.Add("Cerveza");
-        categorias.Add("Vino");
-        categorias.Add("Carne");
 
 
     }
+    private async Task OnCategoriaChanged(ChangeEventArgs e)
+    {
+        CategoriaSeleccionada = e.Value?.ToString() ?? string.Empty;
+
+        if (string.IsNullOrEmpty(CategoriaSeleccionada))
+        {
+            subcategorias.Clear(); // Limpiar las subcategorías si no hay una categoría seleccionada
+        }
+        else
+        {
+            subcategorias = categorias[CategoriaSeleccionada];
+        }
+
+        SubcategoriaSeleccionada = string.Empty; // Reiniciar la subcategoría seleccionada}
+                                                 // Fuerza la actualización de la interfaz
+        StateHasChanged();
+    }
+
+ 
 
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddProducto()
     {
-        Producto.categoria = Seleccionada;
+        if (string.IsNullOrEmpty(SubcategoriaSeleccionada))
+        {
+            // Manejar el caso cuando la subcategoría no se seleccionó
+            return;
+        }
+        
+        Producto.categoria = SubcategoriaSeleccionada;
         supermercado.Productos.Add(Producto);
         await SupermercadoService.updateSupermercado(supermercado);
         await context.SaveChangesAsync();

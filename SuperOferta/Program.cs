@@ -9,6 +9,8 @@ using SuperOferta.Components.Pages.Account;
 using Blazored.LocalStorage;
 
 
+
+
 var builder = WebApplication.CreateBuilder(args);
 //var connectionString = builder.Configuration.GetConnectionString("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Supermercados;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False") ?? throw new InvalidOperationException("Connection string 'SupermercadoContextConnection' not found.");;
 builder.Services.AddDbContext<SupermercadoContext>(options =>
@@ -26,6 +28,7 @@ builder.Services.AddRazorComponents()
 
 builder.Services.AddScoped<ISupermercadoService,SupermercadoService>();
 builder.Services.AddScoped<ProductoService, ProductoService>();
+
 
 builder.Services.AddScoped<ServiceRol>();
 builder.Services.AddCascadingAuthenticationState();
@@ -60,12 +63,15 @@ builder.Services.AddSingleton<IEmailSender<IdentityUser>, IdentityNoOpEmailSende
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddHttpClient<WebScrapingService>();
+builder.Services.AddSingleton<WebScrapingService>();
 var app = builder.Build();
 app.MapGet("/", context =>
 {
     context.Response.Redirect("/home");
     return Task.CompletedTask;
 });
+
 //builder.Services.AddRazorPages();
 // Configure the HTTP request pipeline.
 

@@ -1,0 +1,31 @@
+﻿@namespace SuperOferta.Componentes
+@inherits ComponentBase
+
+<h3>Productos</h3>
+<div class="container mt-4">
+    <div class="row">
+        @foreach (var producto in productos)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="@producto.imagen" class="card-img-top" alt="@producto.ProductoName">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@producto.ProductoName</h5>
+                        <p class="card-text"><strong>Precio:</strong> $@producto.Precio</p>
+                        <p class="card-text"><strong>Fecha de caducidad:</strong> @producto.FechaCaducidad.ToString()</p>
+                        <a href="#" class="btn btn-primary mt-auto">Comprar ahora</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public List<Producto> productos { get; set; } = new List<Producto>();
+
+
+
+}
+

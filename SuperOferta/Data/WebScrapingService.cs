@@ -1,4 +1,6 @@
 ﻿using HtmlAgilityPack;
+using Newtonsoft.Json.Linq;
+using OpenQA.Selenium.Chrome;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -15,31 +17,91 @@ namespace SuperOferta.Data
         }
         public async Task<string> GetProductDataAsync(string url)
         {
-            try
+            var response = await _httpClient.GetStringAsync(url);
+
+            // Parsear el JSON
+            var json = JObject.Parse(response);
+            var result = "";
+
+            // Verificar que el nodo "contents" existe y tiene datos
+            var mainContents = json["contents"]?[0]?["Main"];
+            if (mainContents == null) { return "No se encontraron categorías."; }
+
+
+               
+
+            // Iterar sobre las categorías principales
+            foreach (var mainContent in mainContents)
             {
-                // Obtener la página HTML de la URL proporcionada
-                var response = await _httpClient.GetStringAsync(url);
-                var htmlDocument = new HtmlDocument();
-                htmlDocument.LoadHtml(response);
-                var productNodes = htmlDocument.DocumentNode.SelectNodes("//<img src=https://static.cotodigital3.com.ar/sitios/fotos/large/>]");
 
-                if (productNodes == null)
-                    return "No se encontraron productos.";
-
-                var result = "";
-                foreach (var productNode in productNodes)
                 {
-                    var productName = productNode.SelectSingleNode(".//h5[contains(@class, 'nombre-producto')]")?.InnerText?.Trim();
-                    var productNombre = productNode.SelectSingleNode("<img src=\"https://static.cotodigital3.com.ar/sitios/fotos/large/00267700/00267716.jpg\">")?.InnerText?.Trim();
-                    var productPrice = productNode.SelectSingleNode(".//span[contains(@class, 'price')]")?.InnerText?.Trim();
-                    result += $"Producto: {productName}\nPrecio: {productPrice}\n\n";
+
+                    // Obtener nombre de la categoría principal
+
+
+                    var mainCategoryName = mainContent["category"]?["name"]?.ToString();
+                    if (!string.IsNullOrEmpty(mainCategoryName))
+                    {
+                        result += $"Categoría Principal: {mainCategoryName}\n";
+                    }
+
+
                 }
-            return result;
+
+
+                // Obtener subcategorías dentro de cada categoría principal
+                var subcategories = mainContent["contents"];
+
+
+                if (subcategories != null) {
+
+                    
+
+                        foreach (var subcategory in subcategories)
+                        {
+                            // Obtener nombre de la subcategoría
+                            var subcategoryName = subcategory["category"]?["name"]?.ToString();
+                            if (!string.IsNullOrEmpty(subcategoryName))
+                            {
+                                result += $"  Subcategoría: {subcategoryName}\n";
+                            }
+
+
+                        
+
+
+                        // Obtener productos dentro de la subcategoría
+
+
+                        var products = subcategory["records"];
+                        if (products != null)
+                        {
+                            foreach (var product in products)
+                            {
+
+                                {
+
+                                    // Obtener nombre del producto
+                                    var productName = product["attributes"]?["product.displayName"]?.ToString();
+
+
+                                    if (!string.IsNullOrEmpty(productName))
+                                    {
+                                        result +=$"    - Producto: {productName}\n";
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                    }
+            return string.IsNullOrEmpty(result) ? "No se encontraron productos." : result;
         }
-        catch (Exception ex)
-            {
-                return $"Error: {ex.Message}";
             }
         }
-    }
-}
+    
+
+
+  

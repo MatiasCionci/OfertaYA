@@ -27,7 +27,7 @@ namespace SuperOferta.Models
                     var productoService = scope.ServiceProvider.GetRequiredService<ProductoService>();
 
 
-              //   await productoService.EliminarProductosVencidos();
+               await productoService.EliminarProductosVencidos();
 
 
 
@@ -35,7 +35,7 @@ namespace SuperOferta.Models
 
 
 
-                 //   await Task.Delay(TimeSpan.FromHours(24), stoppingToken); // Corre cada 24 horas
+                 await Task.Delay(TimeSpan.FromHours(24), stoppingToken); // Corre cada 24 horas
                 }
             }
         }

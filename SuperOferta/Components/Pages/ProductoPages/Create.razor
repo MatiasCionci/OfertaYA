@@ -138,7 +138,7 @@
         StateHasChanged();
     }
 
- 
+
 
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddProducto()
@@ -148,8 +148,9 @@
             // Manejar el caso cuando la subcategoría no se seleccionó
             return;
         }
-        
+
         Producto.categoria = SubcategoriaSeleccionada;
+        Producto.imagen = "homeInicio/maker/productos/Azucar.jpg";
         supermercado.Productos.Add(Producto);
         await SupermercadoService.updateSupermercado(supermercado);
         await context.SaveChangesAsync();

@@ -10,9 +10,11 @@
 @code {
     private string scrapedData;
 
+
     private async Task ScrapeCotoData()
     {
-        var url = "https://api.cotodigital.com.ar/sitios/cdigi/productos/"; // URL de ejemplo de Coto
+       
+        var url = "https://api.cotodigital.com.ar/sitios/cdigi/categoria/_/N-8pub5z?Nf=product.startDate|LTEQ%201.7330112E12||product.endDate|GTEQ%201.7330112E12&Nr=AND(product.sDisp_200:1004,product.language:espa%C3%B1ol,OR(product.siteId:CotoDigital))&format=json"; // URL de ejemplo de Coto
         scrapedData = await ScrapingService.GetProductDataAsync(url);
     }
 }

@@ -63,7 +63,7 @@ namespace SuperOferta.Data
         {
             DateOnly actual = new();
             var productosVencidos = await _context.Productos
-            .Where(p => p.FechaCaducidad > actual)
+            .Where(p => p.FechaCaducidad < actual)
             .ToListAsync();
            
             if(productosVencidos.Count > 0)

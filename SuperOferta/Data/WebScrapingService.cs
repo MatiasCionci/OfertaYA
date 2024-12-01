@@ -19,6 +19,8 @@ namespace SuperOferta.Data
         {
             var response = await _httpClient.GetStringAsync(url);
 
+
+        
             // Parsear el JSON
             var json = JObject.Parse(response);
             var result = "";
@@ -39,10 +41,15 @@ namespace SuperOferta.Data
                     // Obtener nombre de la categoría principal
 
 
-                    var mainCategoryName = mainContent["category"]?["name"]?.ToString();
+                    var mainCategoryName = mainContent["navigationState"]?["name"]?.ToString();
                     if (!string.IsNullOrEmpty(mainCategoryName))
                     {
                         result += $"Categoría Principal: {mainCategoryName}\n";
+                    }
+                    var displayName2 = mainContent["displayname"]?["name"].ToString();
+                    if (!string.IsNullOrEmpty(displayName2))
+                    {
+                        result += $"Categoría Principal: {displayName2}\n";
                     }
 
 
@@ -60,7 +67,7 @@ namespace SuperOferta.Data
                         foreach (var subcategory in subcategories)
                         {
                             // Obtener nombre de la subcategoría
-                            var subcategoryName = subcategory["category"]?["name"]?.ToString();
+                            var subcategoryName = subcategory["subCategories2"]?["name"]?.ToString();
                             if (!string.IsNullOrEmpty(subcategoryName))
                             {
                                 result += $"  Subcategoría: {subcategoryName}\n";
@@ -83,13 +90,26 @@ namespace SuperOferta.Data
 
                                     // Obtener nombre del producto
                                     var productName = product["attributes"]?["product.displayName"]?.ToString();
-
-
+                                    var productBrand = product["attributes"]?["product.brand"]?[0]?.ToString();
+                                    var productPrice = product["attributes"]?["sku.referencePrice"]?[0]?.ToString();
+                                    var productDescription = product["attributes"]?["product.briefDescription"]?.ToString();
                                     if (!string.IsNullOrEmpty(productName))
                                     {
                                         result +=$"    - Producto: {productName}\n";
                                             }
-                                        }
+                                    if (!string.IsNullOrEmpty(productBrand))
+                                    {
+                                        result +=$"      Marca: {productBrand}\n";
+                                            }
+                                    if (!string.IsNullOrEmpty(productPrice))
+                                    {
+                                        result +=$"      Precio: ${productPrice}\n";
+                                            }
+                                    if (!string.IsNullOrEmpty(productDescription))
+                                    {
+                                        result += $"      Precio: ${productDescription}\n";
+                                    }
+                                }
                                     }
                                 }
                             }

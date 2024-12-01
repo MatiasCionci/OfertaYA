@@ -5,6 +5,8 @@
 @inject NavigationManager NavigationManager
 @inject ISupermercadoService SupermercadoService
 @rendermode InteractiveServer
+
+
 <PageTitle>Create</PageTitle>
 
 <h1>Create</h1>
@@ -49,10 +51,10 @@
                 </InputSelect>
                
                     <label for="subcategoria" class="form-label mt-3">Subcategoría:</label>
-                    <InputSelect id="subcategoria" @bind-Value="SubcategoriaSeleccionada" class="form-control">
+                    <InputSelect id="subcategoria" @bind-Value="subcategoriaSeleccionada2" class="form-control">
                         <option value="">-- Seleccionar --</option>
                         
-                    @foreach (var subcategoria in subcategorias)
+                    @foreach (var subcategoria in subcategorias2)
                         {
                             <option value="@subcategoria">@subcategoria</option>
                         }
@@ -68,7 +70,7 @@
           
             <p class="mt-3">
                
-                <strong>Subcategoría seleccionada:</strong> @SubcategoriaSeleccionada
+                <strong>Subcategoría seleccionada:</strong> @subcategoriaSeleccionada2
             </p>
             <div class="mb-3">
                 <label for="imagen" class="form-label">imagen:</label>
@@ -95,27 +97,97 @@
     public Supermercado? supermercado { get; set; }
 
     //private List<string> Opciones = new List<string> { "Opción 1", "Opción 2", "Opción 3" };
-    public Dictionary<string, List<string>> categorias = new();
+    public Dictionary<string, List<Tuple<string, string>>> categorias = new();
 
     public string CategoriaSeleccionada { get; set; } = "";
-    public string SubcategoriaSeleccionada { get; set; } = "";
-    public List<string> subcategorias { get; set; } = new List<string>();
+    public string subcategoriaSeleccionada2 { get; set; } = "";
+    public Tuple<string, string> SubcategoriaSeleccionada { get; set; } = null;
+    public List<Tuple<string, string>> subcategorias { get; set; } = new List<Tuple<string, string>>();
+    public List<string> subcategorias2 { get; set; } = new List< string>();
     public bool categoriaCargado { get; set; } = false;
 
 
     protected override async Task OnInitializedAsync()
     {
         supermercado = await context.Supermercados.FindAsync(int.Parse(supermercadoId));
-        categorias.Add("Almacen", new List<string> { "Arroz", "Harina", "Azúcar", "Conservas" });
-        categorias.Add("Bebidas", new List<string> { "Agua", "Jugos", "Refrescos", "Cerveza" });
-        categorias.Add("Frescos", new List<string> { "Carnes", "Pescados", "Verduras", "Frutas" });
-        categorias.Add("Congelados", new List<string> { "Pizzas", "Helados", "Verduras Congeladas", "Comida Rápida" });
-        categorias.Add("Limpieza", new List<string> { "Detergentes", "Desinfectantes", "Limpiadores", "Bolsas de basura" });
-        categorias.Add("Perfumeria", new List<string> { "Shampoo", "Crema hidratante", "Fragancias", "Desodorantes" });
-        categorias.Add("Electro", new List<string> { "Televisores", "Celulares", "Computadoras", "Electrodomésticos" });
-        categorias.Add("Textil", new List<string> { "Ropa", "Zapatos", "Accesorios", "Bolsos" });
-        categorias.Add("Hogar", new List<string> { "Muebles", "Decoración", "Lámparas", "Accesorios de cocina" });
-        categorias.Add("Aire Libre", new List<string> { "Carpas", "Sillas de camping", "Bicicletas", "Accesorios de pesca" });
+        categorias.Add("Almacen", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Arroz 00000 Ala Dorado 1kg", "homeInicio/maker/productos/arrozala.jpg"),
+    new Tuple<string, string>("Harina", ""),
+    new Tuple<string, string>("Azúcar", ""),
+    new Tuple<string, string>("Conservas", "")
+});
+        categorias.Add("Bebidas", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Agua", "ruta/a/imagen/agua.jpg"),
+    new Tuple<string, string>("Jugos", "ruta/a/imagen/jugos.jpg"),
+    new Tuple<string, string>("Refrescos", "ruta/a/imagen/refrescos.jpg"),
+    new Tuple<string, string>("Cerveza", "ruta/a/imagen/cerveza.jpg")
+});
+
+        categorias.Add("Frescos", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Carnes", "ruta/a/imagen/carnes.jpg"),
+    new Tuple<string, string>("Pescados", "ruta/a/imagen/pescados.jpg"),
+    new Tuple<string, string>("Verduras", "ruta/a/imagen/verduras.jpg"),
+    new Tuple<string, string>("Frutas", "ruta/a/imagen/frutas.jpg")
+});
+
+        categorias.Add("Congelados", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Pizzas", "ruta/a/imagen/pizzas.jpg"),
+    new Tuple<string, string>("Helados", "ruta/a/imagen/helados.jpg"),
+    new Tuple<string, string>("Verduras Congeladas", "ruta/a/imagen/verduras_congeladas.jpg"),
+    new Tuple<string, string>("Comida Rápida", "ruta/a/imagen/comida_rapida.jpg")
+});
+
+        categorias.Add("Limpieza", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Detergentes", "ruta/a/imagen/detergentes.jpg"),
+    new Tuple<string, string>("Desinfectantes", "ruta/a/imagen/desinfectantes.jpg"),
+    new Tuple<string, string>("Limpiadores", "ruta/a/imagen/limpiadores.jpg"),
+    new Tuple<string, string>("Bolsas de basura", "ruta/a/imagen/bolsas_basura.jpg")
+});
+
+        categorias.Add("Perfumeria", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Shampoo", "ruta/a/imagen/shampoo.jpg"),
+    new Tuple<string, string>("Crema hidratante", "ruta/a/imagen/crema_hidratante.jpg"),
+    new Tuple<string, string>("Fragancias", "ruta/a/imagen/fragancias.jpg"),
+    new Tuple<string, string>("Desodorantes", "ruta/a/imagen/desodorantes.jpg")
+});
+
+        categorias.Add("Electro", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Televisores", "ruta/a/imagen/televisores.jpg"),
+    new Tuple<string, string>("Celulares", "ruta/a/imagen/celulares.jpg"),
+    new Tuple<string, string>("Computadoras", "ruta/a/imagen/computadoras.jpg"),
+    new Tuple<string, string>("Electrodomésticos", "ruta/a/imagen/electrodomesticos.jpg")
+});
+
+        categorias.Add("Textil", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Ropa", "ruta/a/imagen/ropa.jpg"),
+    new Tuple<string, string>("Zapatos", "ruta/a/imagen/zapatos.jpg"),
+    new Tuple<string, string>("Accesorios", "ruta/a/imagen/accesorios.jpg"),
+    new Tuple<string, string>("Bolsos", "ruta/a/imagen/bolsos.jpg")
+});
+
+        categorias.Add("Hogar", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Muebles", "ruta/a/imagen/muebles.jpg"),
+    new Tuple<string, string>("Decoración", "ruta/a/imagen/decoracion.jpg"),
+    new Tuple<string, string>("Lámparas", "ruta/a/imagen/lamparas.jpg"),
+    new Tuple<string, string>("Accesorios de cocina", "ruta/a/imagen/accesorios_cocina.jpg")
+});
+
+        categorias.Add("Aire Libre", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Carpas", "ruta/a/imagen/carpas.jpg"),
+    new Tuple<string, string>("Sillas de camping", "ruta/a/imagen/sillas_camping.jpg"),
+    new Tuple<string, string>("Bicicletas", "ruta/a/imagen/bicicletas.jpg"),
+new Tuple<string, string>("Accesorios de pesca", "ruta/a/imagen/accesorios_pesca.jpg")
+});
 
 
 
@@ -130,11 +202,15 @@
         }
         else
         {
+            foreach (var cat in categorias[CategoriaSeleccionada])
+            {
+                subcategorias2.Add(cat.Item1);
+            }
             subcategorias = categorias[CategoriaSeleccionada];
         }
-
-        SubcategoriaSeleccionada = string.Empty; // Reiniciar la subcategoría seleccionada}
-                                                 // Fuerza la actualización de la interfaz
+        subcategoriaSeleccionada2 = "";
+        SubcategoriaSeleccionada = new Tuple<string, string>("", ""); ; // Reiniciar la subcategoría seleccionada}
+                                                                        // Fuerza la actualización de la interfaz
         StateHasChanged();
     }
 
@@ -143,14 +219,16 @@
     // To protect from overposting attacks, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
     private async Task AddProducto()
     {
-        if (string.IsNullOrEmpty(SubcategoriaSeleccionada))
+        if (SubcategoriaSeleccionada==null)
         {
             // Manejar el caso cuando la subcategoría no se seleccionó
             return;
         }
 
-        Producto.categoria = SubcategoriaSeleccionada;
-        Producto.imagen = "homeInicio/maker/productos/Azucar.jpg";
+        Producto.categoria = subcategoriaSeleccionada2;
+        var tupla = categorias[CategoriaSeleccionada].FirstOrDefault(t => t.Item1 == subcategoriaSeleccionada2);
+        string imagens = tupla.Item2;
+        Producto.imagen = imagens;
         supermercado.Productos.Add(Producto);
         await SupermercadoService.updateSupermercado(supermercado);
         await context.SaveChangesAsync();

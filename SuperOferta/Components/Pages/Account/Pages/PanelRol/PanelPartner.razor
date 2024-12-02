@@ -5,6 +5,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.EntityFrameworkCore
 @using SuperOferta.Models
+@using Microsoft.AspNetCore.Components.QuickGrid
 @using SuperOferta.Componentes
 @inject SupermercadoContext contexto
 @inject UserManager<IdentityUser> UserManager
@@ -54,7 +55,9 @@ else
                     <td>@producItem.categoria</td>
                     <td>@producItem.FechaCaducidad.ToString()</td>
                     <td>@producItem.Precio</td>
-
+                    <td><a href="@($"productos/edit?id={producItem.Id}")">Edit</a> </td>
+                    <td><a href="@($"productos/details?id={producItem.Id}")">Details</a></td> 
+                    <td><a href="@($"productos/delete?id={producItem.Id}")">Delete</a></td>
                 </tr>
             }
         </tbody>

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SuperOferta.Migrations;
 using SuperOferta.Models;
+using System;
 
 namespace SuperOferta.Data
 {
@@ -61,9 +62,9 @@ namespace SuperOferta.Data
         }
         public async Task EliminarProductosVencidos()
         {
-            DateOnly actual = new();
+            DateOnly actual = DateOnly.FromDateTime(DateTime.Now);
             var productosVencidos = await _context.Productos
-            .Where(p => p.FechaCaducidad < actual)
+            .Where(p => p.FechaCaducidad <= actual)
             .ToListAsync();
            
             if(productosVencidos.Count > 0)

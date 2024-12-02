@@ -1,6 +1,9 @@
 ﻿@page "/productos/create/{supermercadoId}"
 @using Microsoft.EntityFrameworkCore
+
+
 @using SuperOferta.Models
+@using System.ComponentModel.DataAnnotations
 @inject SupermercadoContext context
 @inject NavigationManager NavigationManager
 @inject ISupermercadoService SupermercadoService
@@ -18,10 +21,30 @@
         <EditForm method="post" Model="Producto" OnValidSubmit="AddProducto" FormName="create" Enhance>
             <DataAnnotationsValidator />
             <ValidationSummary class="text-danger" role="alert" />
+
             <div class="mb-3">
-                <label for="productoname" class="form-label">ProductoName:</label>
-                <InputText id="productoname" @bind-Value="Producto.ProductoName" class="form-control" />
-                <ValidationMessage For="() => Producto.ProductoName" class="text-danger" />
+                <label for="categoria" class="form-label">Categoría:</label>
+                <InputSelect id="categoria" @bind-Value="CategoriaSeleccionada" @oninput="OnCategoriaChanged" class="form-control">
+                    <option value="">-- Seleccionar --</option>
+                    @foreach (var categoria in categorias.Keys)
+                    {
+                        <option value="@categoria">@categoria</option>
+                    }
+
+                </InputSelect>
+                <ValidationMessage For="() => CategoriaSeleccionada" class="text-danger" />
+                <label for="subcategoria" class="form-label mt-3">Subcategoría:</label>
+                <InputSelect id="subcategoria" @bind-Value="subcategoriaSeleccionada2" class="form-control">
+                    <option value="">-- Seleccionar --</option>
+
+                    @foreach (var subcategoria in subcategorias2)
+                    {
+                        <option value="@subcategoria">@subcategoria</option>
+                    }
+
+                </InputSelect>
+
+
             </div>
             <div class="mb-3">
                 <label for="fechacaducidad" class="form-label">FechaCaducidad:</label>
@@ -39,44 +62,9 @@
                 <InputText id="descripcion" @bind-Value="Producto.Descripcion" class="form-control" />
                 <ValidationMessage For="() => Producto.Descripcion" class="text-danger" />
             </div>
-            <div class="mb-3">
-                <label for="categoria" class="form-label">Categoría:</label>
-                <InputSelect id="categoria" @bind-Value="CategoriaSeleccionada" @oninput="OnCategoriaChanged" class="form-control">
-                    <option value="" >-- Seleccionar --</option>
-                    @foreach (var categoria in categorias.Keys)
-                    {
-                        <option value="@categoria" >@categoria</option>
-                    }
-                    
-                </InputSelect>
-               
-                    <label for="subcategoria" class="form-label mt-3">Subcategoría:</label>
-                    <InputSelect id="subcategoria" @bind-Value="subcategoriaSeleccionada2" class="form-control">
-                        <option value="">-- Seleccionar --</option>
-                        
-                    @foreach (var subcategoria in subcategorias2)
-                        {
-                            <option value="@subcategoria">@subcategoria</option>
-                        }
-
-                    </InputSelect>
-
         
-                </div>
-                <p class="mt-3">
-                    <strong>Categoría seleccionada:</strong> @CategoriaSeleccionada<br />
-                    
-                </p>
           
-            <p class="mt-3">
-               
-                <strong>Subcategoría seleccionada:</strong> @subcategoriaSeleccionada2
-            </p>
-            <div class="mb-3">
-                <label for="imagen" class="form-label">imagen:</label>
-                <InputText id="imagen" @bind-Value="Producto.imagen" class="form-control" />
-                <ValidationMessage For="() => Producto.imagen" class="text-danger" />
-            </div>
+            
 
             <button type="submit" class="btn btn-primary">Create</button>
         </EditForm>
@@ -93,13 +81,14 @@
     public string? supermercadoId { get; set; }
     [SupplyParameterFromForm]
     private Producto Producto { get; set; } = new();
-
+    [RequiredAttribute(ErrorMessage = "Debe seleccionar una categoría válida.")]
+    public string CategoriaSeleccionada { get; set; } = "";
     public Supermercado? supermercado { get; set; }
 
     //private List<string> Opciones = new List<string> { "Opción 1", "Opción 2", "Opción 3" };
     public Dictionary<string, List<Tuple<string, string>>> categorias = new();
 
-    public string CategoriaSeleccionada { get; set; } = "";
+    
     public string subcategoriaSeleccionada2 { get; set; } = "";
     public Tuple<string, string> SubcategoriaSeleccionada { get; set; } = null;
     public List<Tuple<string, string>> subcategorias { get; set; } = new List<Tuple<string, string>>();
@@ -113,80 +102,80 @@
         categorias.Add("Almacen", new List<Tuple<string, string>>
 {
     new Tuple<string, string>("Arroz 00000 Ala Dorado 1kg", "homeInicio/maker/productos/arrozala.jpg"),
-    new Tuple<string, string>("Harina", ""),
-    new Tuple<string, string>("Azúcar", ""),
-    new Tuple<string, string>("Conservas", "")
+    new Tuple<string, string>("Harina Trigo CASERITA 1kg", "homeInicio/maker/productos/harinacaserita.jpg"),
+    new Tuple<string, string>("Azúcar Superior Real LEDESMA 1kg", "homeInicio/maker/productos/Azucar.jpg"),
+    new Tuple<string, string>("Pate De Foie LA BLANCA 90g", "homeInicio/maker/productos/pate.jpg")
 });
         categorias.Add("Bebidas", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Agua", "ruta/a/imagen/agua.jpg"),
-    new Tuple<string, string>("Jugos", "ruta/a/imagen/jugos.jpg"),
-    new Tuple<string, string>("Refrescos", "ruta/a/imagen/refrescos.jpg"),
-    new Tuple<string, string>("Cerveza", "ruta/a/imagen/cerveza.jpg")
+    new Tuple<string, string>("Agua Saborizada AQUARIUS Manzana 500 Ml", "homeInicio/maker/productos/aguaAquarius.jpg"),
+    new Tuple<string, string>("Jugo Cepita Nutri Naranja Ttb 200 Ml", "homeInicio/maker/productos/jugos.jpg"),
+    new Tuple<string, string>("Gaseosa SEVEN UP Lima Limón 500 Cc", "homeInicio/maker/productos/refrescos.jpg"),
+    new Tuple<string, string>("Cerveza Lager STELLA ARTOIS Lata 473 Cc", "homeInicio/maker/productos/cerveza.jpg")
 });
 
         categorias.Add("Frescos", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Carnes", "ruta/a/imagen/carnes.jpg"),
-    new Tuple<string, string>("Pescados", "ruta/a/imagen/pescados.jpg"),
-    new Tuple<string, string>("Verduras", "ruta/a/imagen/verduras.jpg"),
-    new Tuple<string, string>("Frutas", "ruta/a/imagen/frutas.jpg")
+    new Tuple<string, string>("Bondiola De Cerdo Finas Hierbas 740gr X KG", "homeInicio/maker/productos/carnes.jpg"),
+    new Tuple<string, string>("Mero Filet Fresco Xkg", "homeInicio/maker/productos/pescados.jpg"),
+    new Tuple<string, string>("Rabanito X Kg", "homeInicio/maker/productos/verduras.jpg"),
+    new Tuple<string, string>("Sandia Nacional Xkg", "homeInicio/maker/productos/frutas.jpg")
 });
 
         categorias.Add("Congelados", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Pizzas", "ruta/a/imagen/pizzas.jpg"),
-    new Tuple<string, string>("Helados", "ruta/a/imagen/helados.jpg"),
-    new Tuple<string, string>("Verduras Congeladas", "ruta/a/imagen/verduras_congeladas.jpg"),
-    new Tuple<string, string>("Comida Rápida", "ruta/a/imagen/comida_rapida.jpg")
+    new Tuple<string, string>("Pizza A La Piedra Pepperoni Pietro 510g", "homeInicio/maker/productos/pizzas.jpg"),
+    new Tuple<string, string>("Helado Dl/Fr/Ch Frigor Bal 1500 Grm", "homeInicio/maker/productos/helados.jpg"),
+    new Tuple<string, string>("Espinaca Congelada Lucchetti 400g", "homeInicio/maker/productos/verduras_congeladas.jpg"),
+    new Tuple<string, string>("Empanadas De Pollo El Noble 320g", "homeInicio/maker/productos/comida_rapida.jpg")
 });
 
         categorias.Add("Limpieza", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Detergentes", "ruta/a/imagen/detergentes.jpg"),
-    new Tuple<string, string>("Desinfectantes", "ruta/a/imagen/desinfectantes.jpg"),
-    new Tuple<string, string>("Limpiadores", "ruta/a/imagen/limpiadores.jpg"),
-    new Tuple<string, string>("Bolsas de basura", "ruta/a/imagen/bolsas_basura.jpg")
+    new Tuple<string, string>("Detergente Ultra Limon Magistral 500ml", "homeInicio/maker/productos/detergentes.jpg"),
+    new Tuple<string, string>("Aromatizante De Ambientes LYSOFORM Automático Repues", "homeInicio/maker/productos/desinfectantes.jpg"),
+    new Tuple<string, string>("PROCENEX Limpiador Líquido Para Pisos", "homeInicio/maker/productos/limpiadores.jpg"),
+    new Tuple<string, string>("Bolsas De Residuos TRASH 90 X 120 Cm 10 ", "homeInicio/maker/productos/bolsas_basura.jpg")
 });
 
         categorias.Add("Perfumeria", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Shampoo", "ruta/a/imagen/shampoo.jpg"),
-    new Tuple<string, string>("Crema hidratante", "ruta/a/imagen/crema_hidratante.jpg"),
-    new Tuple<string, string>("Fragancias", "ruta/a/imagen/fragancias.jpg"),
-    new Tuple<string, string>("Desodorantes", "ruta/a/imagen/desodorantes.jpg")
+    new Tuple<string, string>("HEAD & SHOULDERS Hidratación Shampoo Control Caspa 180 Ml", "homeInicio/maker/productos//shampoo.jpg"),
+    new Tuple<string, string>("Crema De Limpieza Ponds C Pepino 100 G", "homeInicio/maker/productos/crema_hidratante.jpg"),
+    new Tuple<string, string>("Aromatizante Para Ropa Lush DOWNY 156g", "homeInicio/maker/productos/fragancias.jpg"),
+    new Tuple<string, string>("Desodorante Coco Bzrp Axe 150ml", "homeInicio/maker/productos/desodorantes.jpg")
 });
 
         categorias.Add("Electro", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Televisores", "ruta/a/imagen/televisores.jpg"),
-    new Tuple<string, string>("Celulares", "ruta/a/imagen/celulares.jpg"),
-    new Tuple<string, string>("Computadoras", "ruta/a/imagen/computadoras.jpg"),
-    new Tuple<string, string>("Electrodomésticos", "ruta/a/imagen/electrodomesticos.jpg")
+            new Tuple<string, string>("Smart Tv Oled LG 65 4K Oled65c3psa", "homeInicio/maker/productos/televisores.jpg"),
+            new Tuple<string, string>("Celular Libre SAMSUNG A05 4G LTE 6.7 4 Gb Ram 64 Gb Plata", "homeInicio/maker/productos/celulares.jpg"),
+            new Tuple<string, string>("Notebook ENOVA 8 Gb Ram 480 Gb Ssd 14", "homeInicio/maker/productos/computadoras.jpg"),
+    new Tuple<string, string>("Microondas Bgh 19 L Blanco B120DB9 700 W", "homeInicio/maker/productos/electrodomesticos.jpg")
 });
 
         categorias.Add("Textil", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Ropa", "ruta/a/imagen/ropa.jpg"),
-    new Tuple<string, string>("Zapatos", "ruta/a/imagen/zapatos.jpg"),
-    new Tuple<string, string>("Accesorios", "ruta/a/imagen/accesorios.jpg"),
-    new Tuple<string, string>("Bolsos", "ruta/a/imagen/bolsos.jpg")
+    new Tuple<string, string>("Jean Niño Straig Celeste Clar Talle 8", "homeInicio/maker/productos/ropa.jpg"),
+    new Tuple<string, string>("Botas Niño/Bebe Niño/A Beige Talle 26", "homeInicio/maker/productos/zapatos.jpg"),
+    new Tuple<string, string>("Peine Peine Grande A TAO Bol 1 Uni", "homeInicio/maker/productos/accesorios.jpg"),
+    new Tuple<string, string>("Bolso Sport Rosa 45x24", "homeInicio/maker/productos/bolsos.jpg")
 });
 
         categorias.Add("Hogar", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Muebles", "ruta/a/imagen/muebles.jpg"),
-    new Tuple<string, string>("Decoración", "ruta/a/imagen/decoracion.jpg"),
-    new Tuple<string, string>("Lámparas", "ruta/a/imagen/lamparas.jpg"),
-    new Tuple<string, string>("Accesorios de cocina", "ruta/a/imagen/accesorios_cocina.jpg")
+    new Tuple<string, string>("Modular DIELFE 141 Cm Marrón", "homeInicio/maker/productos/muebles.jpg"),
+    new Tuple<string, string>("Cuadro Placa Good Vibes 15 X 40 Cm", "homeInicio/maker/productos/decoracion.jpg"),
+    new Tuple<string, string>("Lámpara Led Bulbo EVEREADY Fria 10 W E27 Caja 1 Unidad", "homeInicio/maker/productos/lamparas.jpg"),
+    new Tuple<string, string>("Filtro Domestic Pak 2 Uni", "homeInicio/maker/productos/accesorios_cocina.jpg")
 });
 
         categorias.Add("Aire Libre", new List<Tuple<string, string>>
 {
-    new Tuple<string, string>("Carpas", "ruta/a/imagen/carpas.jpg"),
-    new Tuple<string, string>("Sillas de camping", "ruta/a/imagen/sillas_camping.jpg"),
-    new Tuple<string, string>("Bicicletas", "ruta/a/imagen/bicicletas.jpg"),
-new Tuple<string, string>("Accesorios de pesca", "ruta/a/imagen/accesorios_pesca.jpg")
+    new Tuple<string, string>("Carpa De Playa BESTWAY 2 Personas", "homeInicio/maker/productos/carpas.jpg"),
+    new Tuple<string, string>("Sillas de camping", "homeInicio/maker/productos/sillas_camping.jpg"),
+            new Tuple<string, string>("Bicicleta Infantil PHILCO 16 91fkp16av010mp", "homeInicio/maker/productos/bicicletas.jpg"),
+        new Tuple<string, string>("Caja De Herramientas TRAMONTINA Plástica 13", "homeInicio/maker/productos/cajaherramientas.jpg")
 });
 
 
@@ -229,6 +218,7 @@ new Tuple<string, string>("Accesorios de pesca", "ruta/a/imagen/accesorios_pesca
         var tupla = categorias[CategoriaSeleccionada].FirstOrDefault(t => t.Item1 == subcategoriaSeleccionada2);
         string imagens = tupla.Item2;
         Producto.imagen = imagens;
+        Producto.ProductoName = tupla.Item1;
         supermercado.Productos.Add(Producto);
         await SupermercadoService.updateSupermercado(supermercado);
         await context.SaveChangesAsync();

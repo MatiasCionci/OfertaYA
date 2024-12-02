@@ -43,6 +43,11 @@ else
                     <ValidationMessage For="() => Producto.categoria" class="text-danger" />
                 </div>
                 <div class="mb-3">
+                    <label for="precio" class="form-label">Precio:</label>
+                    <InputNumber id="precio" @bind-Value="Producto.Precio" class="form-control" />
+                    <ValidationMessage For="() => Producto.Precio" class="text-danger" />
+                </div>
+                <div class="mb-3">
                     <label for="imagen" class="form-label">imagen:</label>
                     <InputText id="imagen" @bind-Value="Producto.imagen" class="form-control" />
                     <ValidationMessage For="() => Producto.imagen" class="text-danger" />
@@ -98,7 +103,7 @@ else
             }
         }
 
-        NavigationManager.NavigateTo("/productos");
+        NavigationManager.NavigateTo("/panellpartner");
     }
 
     private bool ProductoExists(int id)

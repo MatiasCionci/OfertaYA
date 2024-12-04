@@ -4,31 +4,22 @@
 
 @using Microsoft.AspNetCore.Components
 
-    <h1>@Titulo</h1>
+   
    
 
-
-   
-<h3>Mapa</h3>
-<h2>@Ubicaciony</h2>
-<h2>@Ubicacionx</h2>
-<button class="btn btn-outline-success" data-toggle="tooltip" title="Exportar" @onclick="Export">Encuentrame</button>
+<button class="btn btn-outline-success" data-toggle="tooltip" title="Exportar" @onclick="Export">Ver Ubicacion </button>
 <div class="qr-code-container">
     <div class="qr-code" style></div>
 </div>
-    <div id="map" class="map" style="height:500px;width:500px"></div>
+<div id="map" class="map" style="height:500px;width:100%" margin-top: 20px;></div>
 
     <script>
         window.GenerarMapa = async (ubicacionx,ubicaciony) => {
-        const coord1 = L.latLng(-34.6037, -58.3816); // Buenos Aires
-        const coord2 = L.latLng(-34.9205, -57.9536); // La Plata
-
-        // Distancia en metros
-        const distancia = coord1.distanceTo(coord2);
-        console.log(`La distancia es: ${(distancia / 1000).toFixed(2)} km`);
+      
+       
 
 
-        var map = L.map('map').setView([ubicacionx,ubicaciony], 15);
+        var map = L.map('map').setView([ubicacionx,ubicaciony], 13);
 
 
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -85,7 +76,7 @@
      
 
     }
-    //https://forum.bubble.io/t/jspdf-integration/7618
+ 
 }
 
 

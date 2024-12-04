@@ -10,13 +10,15 @@
 @inject IdentityUserAccessor UserAccessor
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
-
-
+@inject ProductoService productService
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
 
 
 <h3>PanelAdmin </h3>
 <h4>  Bienvenido @username </h4>
-<button>Actualizar todos los productos vencidos</button>
+<h4>  @Actualizado </h4>
+<button class ="btn btn-primary " @onclick="ActualizarProductos">Actualizar todos los productos vencidos</button>
 
 @if (notificaciones == null)
 {
@@ -56,7 +58,7 @@
     private IdentityUser user = default!;
     private string? username;
     private List<NotificacionesAdmin> notificaciones = new();
-
+    private string Actualizado { get; set; } = "";
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -71,10 +73,11 @@
         username = await UserManager.GetUserNameAsync(user);
 
     }
-    protected async Task AgregarCoordenadas()
+   
+    private async Task ActualizarProductos()
     {
-       RedirectManager.RedirectTo("coordenadas");
-     
-    }
 
+        await productService.EliminarProductosVencidos();
+        Actualizado = "Actualizado";
+    }
 }

@@ -1,31 +1,43 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>mapas</title>
+﻿<script>
+    window.GenerarMapa = async (ubicacionx, ubicaciony) => {
+        const coord1 = L.latLng(-34.6037, -58.3816); // Buenos Aires
+        const coord2 = L.latLng(-34.9205, -57.9536); // La Plata
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-
-</head>
-<body>
-    <script>
-        window.GenerarMapa = async () => {
+        // Distancia en metros
+        const distancia = coord1.distanceTo(coord2);
+        console.log(`La distancia es: ${(distancia / 1000).toFixed(2)} km`);
 
 
-            var map = L.map('map').setView([51.505, -0.09], 3);
+        var map = L.map('map').setView([ubicacionx, ubicaciony], 15);
 
-            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }).addTo(map);
 
-            L.marker([51.5, -0.09]).addTo(map)
-                .bindPopup('I am here.<br> Empresa')
-                .openPopup();
+        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
 
+
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLat = position.coords.latitude;
+                var userLng = position.coords.longitude;
+
+                // Agregar un marcador para la ubicación actual del usuario
+                L.marker([userLat, userLng]).addTo(map)
+                    .bindPopup('Estás aquí')
+                    .openPopup();
+
+                L.marker([ubicacionx, ubicaciony]).addTo(map)
+                    .bindPopup('SupermercadoUbicacion')
+                    .openPopup();
+
+
+                // Centrar el mapa en la ubicación del usuario
+
+            }
+            );
         }
-    </script>
+    }
 
-
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-</body>
-</html>
+</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>

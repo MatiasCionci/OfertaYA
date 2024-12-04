@@ -62,16 +62,17 @@ namespace SuperOferta.Data
         }
         public async Task EliminarProductosVencidos()
         {
-            DateOnly actual = DateOnly.FromDateTime(DateTime.Now);
+            var actual = DateOnly.FromDateTime(DateTime.Now);
+            Console.WriteLine($"La fecha actual es: {actual}");
             var productosVencidos = await _context.Productos
-            .Where(p => p.FechaCaducidad <= actual)
-            .ToListAsync();
-           
-            if(productosVencidos.Count > 0)
+            .Where(p => p.FechaCaducidad.HasValue && p.FechaCaducidad <= actual)
+        .ToListAsync();
+
+            if (productosVencidos.Count > 0)
             {
                 foreach(var pvencido in productosVencidos)
                 {
-                    deleteProductooById(pvencido.Id);
+                  //  deleteProductooById(pvencido.Id);
                 }
 
             }

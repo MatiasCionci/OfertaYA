@@ -17,71 +17,72 @@
 @attribute [Authorize(Roles = "Cliente")]
 <h3>PanelCliente</h3>
 
-
-
-
+@if(mensajeFaltaCate){
+<div class="alert alert-danger" role="alert">
+    <h1>@mensajeFaltaCategoria</h1>
+</div>
+}
 <button class="w-100 btn btn-lg btn-primary" @onclick="HabilitarProducto">Buscar por producto</button>
 @if (xproducto)
 {
     <div class="mb-3">
         <label>Categoria</label>
 
-        <InputSelect id="categorias" @bind-Value="Seleccionada" class="form-control" @onclick="()=>BuscarXProducto(Seleccionada)">
+       
+        <InputSelect id="categoria" @bind-Value="CategoriaSeleccionada" @oninput="OnCategoriaChanged" class="form-control">
             <option value="">-- Seleccionar --</option>
-            @foreach (var opcion in categorias)
+            @foreach (var categoria in categorias.Keys)
             {
-                <option value="@opcion">@opcion</option>
+                <option value="@categoria">@categoria</option>
             }
-        </InputSelect>
 
+        </InputSelect>
+        <label for="subcategoria" class="form-label mt-3">Subcategoría:</label>
+        <InputSelect id="subcategoria" @bind-Value="subcategoriaSeleccionada2" class="form-control" @oninput="OnSubCategoriaChanged">
+                    <option value="">-- Seleccionar --</option>
+
+                    @foreach (var subcategoria in subcategorias2)
+                    {
+                        <option value="@subcategoria">@subcategoria</option>
+                    }
+
+        </InputSelect>
+        
+        
+        
     </div>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>
-                    Nombre del Supermercado
-                </th>
-                <th>
-                    Direccion
-                </th>
-                <th>
-                    Categoria del Producto
-                </th>
-                <th>
-                    Fecha de Caducidad
-                </th>
-                <th>
-                    Precio
-                </th>
-                <th>
-                    ver en mapa
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var superItem in BusquedaproductosXcategoria)
-            {
-                <tr>
-                    <td>@superItem.SupermercadoName</td>
-                    <td>@superItem.Direccion</td>
-                    <td>@superItem.productos.First().categoria</td>
-                    <td>@superItem.productos.First().FechaCaducidad</td>
-                    <td>@superItem.productos.First().Precio</td>
-                    <td><a href="/Mapas/@superItem.Coordenadaxx/@superItem.Coordenadayy">enviar</a></td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <h2>@Seleccionada</h2>
+  
+        <div class="container mt-4">
+    <div class="row">
+        @foreach (var superItem in BusquedaproductosXcategoria)
+        {
+            <div class="col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <img src="@superItem.productos.First().imagen" class="card-img-top" alt="@superItem.productos.First().ProductoName">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@superItem.productos.First().ProductoName</h5>
+                        <p class="card-text"><strong>Precio:</strong> @superItem.productos.First().Precio</p>
+                        <p class="card-text"><strong>Fecha de caducidad:</strong> @superItem.productos.First().FechaCaducidad.ToString()</p>
+                        <a href="/Mapas/@superItem.Coordenadaxx/@superItem.Coordenadayy" class="btn btn-primary mt-auto">Ver Mapa</a>
+                    </div>
+                </div>
+            </div>
+   
+        }
+            </div>
+        </div>
+    
+   
 }
-<p>Distancia en km</p>
+<p>Buscar Supermercados por distancia en km</p>
 <input type="number" @bind-value="valorAbuscar" />
 <button class="w-100 btn btn-lg btn-primary" @onclick="HabilitarXDistancia">Ver los mas cercano</button>
 @if (xdistancia)
 {
+    <br />
+    <br />
 
-  
-    <td><a href="/MapasDistancia/@valorAbuscar.ToString()/@cadenaAPasar">enviar</a></td>
+    <td><a href="/MapasDistancia/@valorAbuscar.ToString()/@cadenaAPasar" class="w-100 btn btn-lg btn-info">Ver en Mapa</a></td>
 }
 else
 {
@@ -92,24 +93,101 @@ else
 
     //  blazor-protectedsessionstorage
     private int valorAbuscar { get; set; } = 0;
-    private List<string> categorias = new();
-    private string? Seleccionada="";
+    private string mensajeFaltaCategoria { get; set; } = "";
+    private bool mensajeFaltaCate { get; set; } = false;
+    public Dictionary<string, List<Tuple<string, string>>> categorias = new();
+    public string CategoriaSeleccionada { get; set; } = "";
+    public Tuple<string, string> SubcategoriaSeleccionada { get; set; } = null;
+    public string subcategoriaSeleccionada2 { get; set; } = "";
+    public List<string> subcategorias2 { get; set; } = new List<string>();
     private bool xproducto = false;
     private bool xdistancia = false;
     private List<SupermercadosProductosModel> BusquedaproductosXcategoria = new();
 
     private Producto producto = new();
     private string cadenaAPasar = "";
-
+    public List<Tuple<string, string>> subcategorias { get; set; } = new List<Tuple<string, string>>();
     protected override async Task OnInitializedAsync()
     {
 
-        categorias.Add("Gaseosa");
-        categorias.Add("Lacteos");
-        categorias.Add("Arroz 00000 Ala Dorado 1kg");
-        categorias.Add("Harina Trigo CASERITA 1kg");
-        categorias.Add("Azúcar Superior Real LEDESMA 1kg");
-        categorias.Add("Pate De Foie LA BLANCA 90g");
+        categorias.Add("Almacen", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Arroz 00000 Ala Dorado 1kg", "homeInicio/maker/productos/arrozala.jpg"),
+    new Tuple<string, string>("Harina Trigo CASERITA 1kg", "homeInicio/maker/productos/harinacaserita.jpg"),
+    new Tuple<string, string>("Azúcar Superior Real LEDESMA 1kg", "homeInicio/maker/productos/Azucar.jpg"),
+    new Tuple<string, string>("Pate De Foie LA BLANCA 90g", "homeInicio/maker/productos/pate.jpg")
+});
+        categorias.Add("Bebidas", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Agua Saborizada AQUARIUS Manzana 500 Ml", "homeInicio/maker/productos/aguaAquarius.jpg"),
+    new Tuple<string, string>("Jugo Cepita Nutri Naranja Ttb 200 Ml", "homeInicio/maker/productos/jugos.jpg"),
+    new Tuple<string, string>("Gaseosa SEVEN UP Lima Limón 500 Cc", "homeInicio/maker/productos/refrescos.jpg"),
+    new Tuple<string, string>("Cerveza Lager STELLA ARTOIS Lata 473 Cc", "homeInicio/maker/productos/cerveza.jpg")
+});
+
+        categorias.Add("Frescos", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Bondiola De Cerdo Finas Hierbas 740gr X KG", "homeInicio/maker/productos/carnes.jpg"),
+    new Tuple<string, string>("Mero Filet Fresco Xkg", "homeInicio/maker/productos/pescados.jpg"),
+    new Tuple<string, string>("Rabanito X Kg", "homeInicio/maker/productos/verduras.jpg"),
+    new Tuple<string, string>("Sandia Nacional Xkg", "homeInicio/maker/productos/frutas.jpg")
+});
+
+        categorias.Add("Congelados", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Pizza A La Piedra Pepperoni Pietro 510g", "homeInicio/maker/productos/pizzas.jpg"),
+    new Tuple<string, string>("Helado Dl/Fr/Ch Frigor Bal 1500 Grm", "homeInicio/maker/productos/helados.jpg"),
+    new Tuple<string, string>("Espinaca Congelada Lucchetti 400g", "homeInicio/maker/productos/verduras_congeladas.jpg"),
+    new Tuple<string, string>("Empanadas De Pollo El Noble 320g", "homeInicio/maker/productos/comida_rapida.jpg")
+});
+
+        categorias.Add("Limpieza", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Detergente Ultra Limon Magistral 500ml", "homeInicio/maker/productos/detergentes.jpg"),
+    new Tuple<string, string>("Aromatizante De Ambientes LYSOFORM Automático Repues", "homeInicio/maker/productos/desinfectantes.jpg"),
+    new Tuple<string, string>("PROCENEX Limpiador Líquido Para Pisos", "homeInicio/maker/productos/limpiadores.jpg"),
+    new Tuple<string, string>("Bolsas De Residuos TRASH 90 X 120 Cm 10 ", "homeInicio/maker/productos/bolsas_basura.jpg")
+});
+
+        categorias.Add("Perfumeria", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("HEAD & SHOULDERS Hidratación Shampoo Control Caspa 180 Ml", "homeInicio/maker/productos//shampoo.jpg"),
+    new Tuple<string, string>("Crema De Limpieza Ponds C Pepino 100 G", "homeInicio/maker/productos/crema_hidratante.jpg"),
+    new Tuple<string, string>("Aromatizante Para Ropa Lush DOWNY 156g", "homeInicio/maker/productos/fragancias.jpg"),
+    new Tuple<string, string>("Desodorante Coco Bzrp Axe 150ml", "homeInicio/maker/productos/desodorantes.jpg")
+});
+
+        categorias.Add("Electro", new List<Tuple<string, string>>
+{
+            new Tuple<string, string>("Smart Tv Oled LG 65 4K Oled65c3psa", "homeInicio/maker/productos/televisores.jpg"),
+            new Tuple<string, string>("Celular Libre SAMSUNG A05 4G LTE 6.7 4 Gb Ram 64 Gb Plata", "homeInicio/maker/productos/celulares.jpg"),
+            new Tuple<string, string>("Notebook ENOVA 8 Gb Ram 480 Gb Ssd 14", "homeInicio/maker/productos/computadoras.jpg"),
+    new Tuple<string, string>("Microondas Bgh 19 L Blanco B120DB9 700 W", "homeInicio/maker/productos/electrodomesticos.jpg")
+});
+
+        categorias.Add("Textil", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Jean Niño Straig Celeste Clar Talle 8", "homeInicio/maker/productos/ropa.jpg"),
+    new Tuple<string, string>("Botas Niño/Bebe Niño/A Beige Talle 26", "homeInicio/maker/productos/zapatos.jpg"),
+    new Tuple<string, string>("Peine Peine Grande A TAO Bol 1 Uni", "homeInicio/maker/productos/accesorios.jpg"),
+    new Tuple<string, string>("Bolso Sport Rosa 45x24", "homeInicio/maker/productos/bolsos.jpg")
+});
+
+        categorias.Add("Hogar", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Modular DIELFE 141 Cm Marrón", "homeInicio/maker/productos/muebles.jpg"),
+    new Tuple<string, string>("Cuadro Placa Good Vibes 15 X 40 Cm", "homeInicio/maker/productos/decoracion.jpg"),
+    new Tuple<string, string>("Lámpara Led Bulbo EVEREADY Fria 10 W E27 Caja 1 Unidad", "homeInicio/maker/productos/lamparas.jpg"),
+    new Tuple<string, string>("Filtro Domestic Pak 2 Uni", "homeInicio/maker/productos/accesorios_cocina.jpg")
+});
+
+        categorias.Add("Aire Libre", new List<Tuple<string, string>>
+{
+    new Tuple<string, string>("Carpa De Playa BESTWAY 2 Personas", "homeInicio/maker/productos/carpas.jpg"),
+    new Tuple<string, string>("Sillas de camping", "homeInicio/maker/productos/sillas_camping.jpg"),
+            new Tuple<string, string>("Bicicleta Infantil PHILCO 16 91fkp16av010mp", "homeInicio/maker/productos/bicicletas.jpg"),
+        new Tuple<string, string>("Caja De Herramientas TRAMONTINA Plástica 13", "homeInicio/maker/productos/cajaherramientas.jpg")
+});
 
         producto.Descripcion = "desripcion paso";
 
@@ -120,6 +198,7 @@ else
         //ordenados x Valor
         BusquedaproductosXcategoria = context.Supermercados.Include("Productos").Select(s=> new SupermercadosProductosModel()
         {
+
            productos = s.Productos.Where(p => p.categoria == valor).ToList(),
            SupermercadoName=s.SupermercadoName,
            Direccion=s.Direccion,
@@ -129,9 +208,48 @@ else
 
         }).ToList();
         BusquedaproductosXcategoria = BusquedaproductosXcategoria.Where(b => b.productos.Count > 0).ToList();
-        Seleccionada =valor;
+        //  subcategoriaSeleccionada2 =valor;
     }
     private Action ActionBuscar => () => BuscarXdistancia(valorAbuscar);
+
+    private async Task OnCategoriaChanged(ChangeEventArgs e)
+    {
+        CategoriaSeleccionada = e.Value?.ToString() ?? string.Empty;
+
+        if (string.IsNullOrEmpty(CategoriaSeleccionada))
+        {
+            subcategorias.Clear(); // Limpiar las subcategorías si no hay una categoría seleccionada
+        }
+        else
+        {
+            foreach (var cat in categorias[CategoriaSeleccionada])
+            {
+                subcategorias2.Add(cat.Item1);
+            }
+            subcategorias = categorias[CategoriaSeleccionada];
+        }
+        subcategoriaSeleccionada2 = "";
+        SubcategoriaSeleccionada = new Tuple<string, string>("", ""); // Reiniciar la subcategoría seleccionada}
+                                                                      // Fuerza la actualización de la interfaz
+        StateHasChanged();
+    }
+    private async Task OnSubCategoriaChanged(ChangeEventArgs e)
+    {
+        subcategoriaSeleccionada2 = e.Value?.ToString() ?? string.Empty;
+        if (string.IsNullOrEmpty(CategoriaSeleccionada))
+        {
+            subcategorias.Clear(); // Limpiar las subcategorías si no hay una categoría seleccionada
+        }
+        else
+        {
+            await BuscarXProducto(subcategoriaSeleccionada2);
+        }
+        subcategoriaSeleccionada2 = "";
+        SubcategoriaSeleccionada = new Tuple<string, string>("", ""); // Reiniciar la subcategoría seleccionada}
+                                                                      // Fuerza la actualización de la interfaz
+        StateHasChanged();
+
+    }
 
     private async Task BuscarXdistancia(int valor)
     {
@@ -144,10 +262,21 @@ else
         xproducto=true;
     }
     private async Task HabilitarXDistancia()
-    { 
-        generarCadena();
-        xproducto = false;
-        xdistancia = true;
+    {
+        if (subcategoriaSeleccionada2 == "")
+        {
+            mensajeFaltaCate = true;
+            mensajeFaltaCategoria = "Falta seleccionar categoria";
+        }
+        else
+        {
+            mensajeFaltaCate = false;
+            generarCadena();
+            xproducto = false;
+            xdistancia = true;
+            
+        }
+       
     }
     private void generarCadena()
     {

@@ -1,14 +1,10 @@
 ﻿@page "/MapasDistancia/{distanciaACom}/{cadenaApasar}"
 @inject IJSRuntime JS
 @rendermode InteractiveServer
-
+@inject ProductoService productoService
 @using Microsoft.AspNetCore.Components
 
-<h1>Ver los supermercados por kilometros</h1>
-@foreach(var item in listSupermercados)
-{
-    <p>@item</p>
-}
+<h1>Ver los supermercados que estan cerca </h1>
 
 
 
@@ -19,7 +15,7 @@
 <div class="qr-code-container">
     <div class="qr-code" style></div>
 </div>
-<div id="map" class="map" style="height:500px;width:500px"></div>
+<div id="map" class="map" style="height:500px;width:100%"></div>
 
 <script>
         window.GenerarMapa = async (distanciaACom,listSupermercados) => {
@@ -134,6 +130,7 @@
 
 
             await JS.InvokeVoidAsync("GenerarMapa",int.Parse(distanciaACom), listSupermercados);
+           
             Titulo = Titulo + "pasomapa";
 
         }

@@ -13,7 +13,8 @@
                         <h5 class="card-title">@producto.ProductoName</h5>
                         <p class="card-text"><strong>Precio:</strong> $@producto.Precio</p>
                         <p class="card-text"><strong>Fecha de caducidad:</strong> @producto.FechaCaducidad.ToString()</p>
-                        <a href="#" class="btn btn-primary mt-auto">Comprar ahora</a>
+                      
+                        <a href="@($"productos/delete?id={producto.Id}")" class=" btn btn-primary mt-auto">Delete</a>
                     </div>
                 </div>
             </div>

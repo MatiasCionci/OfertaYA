@@ -57,3 +57,44 @@ h1:focus {
     object-fit: cover; /* Recorta la imagen para llenar el contenedor sin deformarla */
     object-position: center; /* Centra la imagen dentro del recorte */
 }
+.modal-overlay {
+    display: flex;
+    justify-co justify-content: center;
+    align-items: center;
+}
+
+.modal-dialog {
+    back background-color: white;
+    border-radius: 8px;
+    ma max-width: 900px;
+    width: 100%;
+    box-shado box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-content {
+    padd padding: 20px;
+}
+
+}
+
+.modal-header,
+.modal-footer {
+    display: flex;
+    justify- justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+.modal-body {
+    paddin padding: 20px 0;
+}

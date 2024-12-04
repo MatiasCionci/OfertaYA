@@ -12,7 +12,11 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject IdentityUserAccessor UserAccessor
 @inject IdentityRedirectManager RedirectManager
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@using SuperOferta.Components.Pages.Account.Shared
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Partner")]
 
 
 @if (confirmado)
@@ -24,9 +28,13 @@
 }
 else
 {
+ 
     <h1>Bienvenido @supermercado.SupermercadoName</h1>
-    <a href="/productos/create/@supermercado.Id.ToString()">Agregar Producto</a>
+    <a href="/productos/create/@supermercado.Id.ToString()" class=" btn btn-primary mt-auto" >Agregar Producto</a>
+    <a href="@HabilitarProductos" class=" btn btn-primary mt-auto" @onclick="HabilitarProductos">Editar Productos</a>
+    <button class="btn btn-primary mt-auto" @onclick="HabilitarYNavegar">Editar Productos</button>
 
+   
 
     <table class="table table-striped">
         <thead>
@@ -57,12 +65,12 @@ else
                     <td>@producItem.Precio</td>
                     <td><a href="@($"productos/edit?id={producItem.Id}")">Edit</a> </td>
                     <td><a href="@($"productos/details?id={producItem.Id}")">Details</a></td> 
-                    <td><a href="@($"productos/delete?id={producItem.Id}")">Delete</a></td>
+                   
                 </tr>
             }
         </tbody>
     </table>
-
+    
     <Productos productos="Listproductos"></Productos>
 }
 
@@ -76,6 +84,7 @@ else
     private string? email="";
     public Supermercado? supermercado { get; set; }
     private bool confirmado = true;
+  
     private List<Producto> Listproductos = new();
     private bool tablaProducto = false;
 
@@ -97,8 +106,16 @@ else
         }
         Listproductos = supermercado.Productos;
     }
-    private async Task HabilitarProductos()
+    public async Task HabilitarProductos()
     {
         tablaProducto = true;
+        StateHasChanged();
+    }
+    private void HabilitarYNavegar()
+    {
+        tablaProducto = true;
+        StateHasChanged();
+        // Lógica de habilitación
+  
     }
 }

@@ -12,8 +12,8 @@ using SuperOferta.Models;
 namespace SuperOferta.Migrations
 {
     [DbContext(typeof(SupermercadoContext))]
-    [Migration("20241218050021_base")]
-    partial class @base
+    [Migration("20241219051617_Supermercados")]
+    partial class Supermercados
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

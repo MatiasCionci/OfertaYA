@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SuperOferta.Migrations;
+//using SuperOferta.Migrations;
 using SuperOferta.Models;
 using System;
 

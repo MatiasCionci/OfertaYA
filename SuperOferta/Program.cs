@@ -16,7 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 //var connectionString = builder.Configuration.GetConnectionString("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Supermercados;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False") ?? throw new InvalidOperationException("Connection string 'SupermercadoContextConnection' not found.");;
 builder.Services.AddDbContext<SupermercadoContext>(options =>
 {
-    options.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=Supermercados;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False");
+    //Server=db10978.public.databaseasp.net; Database=db10978; User Id=db10978; Password=Fa8_2#kWC9=g; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;
+    options.UseSqlServer("Server=db10978.public.databaseasp.net; Database=db10978; User Id=db10978; Password=Fa8_2#kWC9=g; Encrypt=True; TrustServerCertificate=True; MultipleActiveResultSets=True;");
 });
 builder.Services.AddBlazoredLocalStorage();
 

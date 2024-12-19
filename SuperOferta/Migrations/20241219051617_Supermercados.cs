@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SuperOferta.Migrations
 {
     /// <inheritdoc />
-    public partial class @base : Migration
+    public partial class Supermercados : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

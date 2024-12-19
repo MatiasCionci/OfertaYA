@@ -12,8 +12,8 @@ using SuperOferta.Models;
 namespace SuperOferta.Migrations
 {
     [DbContext(typeof(SupermercadoContext))]
-    [Migration("20241120062456_producd")]
-    partial class producd
+    [Migration("20241218050021_base")]
+    partial class @base
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -259,6 +259,9 @@ namespace SuperOferta.Migrations
                     b.Property<string>("EmailPartner")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("validado")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("NotificacionesAdmin");
@@ -275,8 +278,11 @@ namespace SuperOferta.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("FechaCaducidad")
+                    b.Property<DateOnly>("FechaCaducidad")
                         .HasColumnType("date");
+
+                    b.Property<int>("Precio")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProductoName")
                         .HasColumnType("nvarchar(max)");

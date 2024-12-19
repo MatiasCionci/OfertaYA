@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SuperOferta.Migrations
 {
     /// <inheritdoc />
-    public partial class producd : Migration
+    public partial class @base : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,7 +72,8 @@ namespace SuperOferta.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmailPartner = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Direccion = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    validado = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -224,7 +225,8 @@ namespace SuperOferta.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductoName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FechaCaducidad = table.Column<DateOnly>(type: "date", nullable: true),
+                    FechaCaducidad = table.Column<DateOnly>(type: "date", nullable: false),
+                    Precio = table.Column<int>(type: "int", nullable: false),
                     Descripcion = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     categoria = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     imagen = table.Column<string>(type: "nvarchar(max)", nullable: true),

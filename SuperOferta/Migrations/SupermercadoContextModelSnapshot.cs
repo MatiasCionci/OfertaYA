@@ -275,10 +275,10 @@ namespace SuperOferta.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateOnly?>("FechaCaducidad")
+                    b.Property<DateOnly>("FechaCaducidad")
                         .HasColumnType("date");
 
-                    b.Property<int?>("Precio")
+                    b.Property<int>("Precio")
                         .HasColumnType("int");
 
                     b.Property<string>("ProductoName")

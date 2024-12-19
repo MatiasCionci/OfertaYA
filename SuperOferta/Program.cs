@@ -7,6 +7,7 @@ using SuperOferta.Models;
 using Microsoft.AspNetCore.Components.Authorization;
 using SuperOferta.Components.Pages.Account;
 using Blazored.LocalStorage;
+using SuperOferta.Components.Pages.Account.Pages.Manage;
 
 
 
@@ -35,6 +36,17 @@ builder.Services.AddCascadingAuthenticationState();
 
 builder.Services.AddScoped<IdentityUserAccessor>();
 
+//Validando token
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+{
+    options.TokenLifespan = TimeSpan.FromHours(3);
+});
+
+builder.Services.AddLogging(logging =>
+{
+    logging.AddConsole();
+    logging.AddDebug();
+});
 
 
 
@@ -59,8 +71,9 @@ builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.Require
     .AddDefaultTokenProviders();
 
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, IdentityNoOpEmailSender>();
-
-
+builder.Services.AddTransient<EmailService>();
+//para que funcione con identity se agrega lo de abajo email
+builder.Services.AddTransient<IEmailSender<IdentityUser>, EmailSender>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient<WebScrapingService>();

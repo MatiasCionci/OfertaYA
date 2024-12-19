@@ -6,10 +6,10 @@
 @inject IUserStore<IdentityUser> UserStore
 @inject SignInManager<IdentityUser> SignInManager
 @inject IEmailSender<IdentityUser> EmailSender
-
+@inject EmailService EmailService
 @inject NavigationManager NavigationManager
 
-
+<p>@resultado2</p>
 
 <h1>SupermercadoDetalle</h1>
 
@@ -37,9 +37,63 @@
 </ul>
 
 
+<h3>Enviar Correo</h3>
 
+<div>
+    <label>Destinatario:</label>
+    <input @bind="destinatario" type="email" />
+</div>
+<div>
+    <label>Asunto:</label>
+    <input @bind="asunto" />
+</div>
+<div>
+    <label>Mensaje:</label>
+    <textarea @bind="mensaje"></textarea>
+</div>
+<button @onclick="EnviarCorreo">Enviar</button>
+
+<button @onclick="ProblemaAResolver">Enviar</button>
+
+@if (mensajeConfirmacion != null)
+{
+    <p>@mensajeConfirmacion</p>
+}
 
 @code {
+    public long valor1  = 2023;
+    public long valor2 = 2024;
+    public long valor3  = 2025;
+    public int contador { get; set; } = 4;
+    public long resultado = 6072;
+    public long resultado2 = 0;
+    private string destinatario;
+    private string asunto;
+    private string mensaje;
+    private string mensajeConfirmacion;
+
+    public  async Task ProblemaAResolver()
+    {
+        var valor1 = 2023;
+        var valor2 = 2024;
+        var valor3 = 2025;
+        var resultado = 6072;
+        long periodo = 124000; // Usamos un valor arbitrario basado en el patrón repetitivo
+        long maxIteraciones = 2023202320232023 % periodo;
+        resultado2 = resultado;
+        for (var i = 4; i <= maxIteraciones; i++)
+        {
+            valor1=valor2;
+            valor2 = valor3;
+            valor3 = resultado;
+            resultado = valor1 + valor2 + valor3;
+
+            
+        }
+        resultado = resultado % 10000;
+        resultado2 = resultado;
+    }
+
     private Supermercado supermercado = new Supermercado();
     private String titulo = "primero";
     private List<string> roles = new List<string>();
@@ -70,29 +124,29 @@
         var userId = await UserManager.GetUserIdAsync(user);
         //  var user2=   await UserManager.FindByIdAsync("1");
         var userEmail = await UserManager.FindByEmailAsync("partner23@gmail.com");
-   
-     roles=    (await UserManager.GetRolesAsync(userEmail)).ToList();
 
-        /*
+        roles=    (await UserManager.GetRolesAsync(userEmail)).ToList();
+
+           /*
            *
-           *    if (roles != null)
-            {
+            *    if (roles != null)
+               {
                titulo = titulo + "ka"+userEmail.UserName+userId+userEmail.ConcurrencyStamp;
             }
             else
-            {
+                {
                 titulo = titulo + "nulo roles";
-            }
+           }
            */
 
 
         titulo = titulo+ roles.First();
     }
-     private IdentityUser CreateUser()
+    private IdentityUser CreateUser()
     {
         try
         {
-          
+
             return Activator.CreateInstance<IdentityUser>();
         }
         catch
@@ -110,5 +164,18 @@
         }
         return (IUserEmailStore<IdentityUser>)UserStore;
     }
-
+    private async Task EnviarCorreo()
+    {
+        try
+        {
+            await EmailService.SendEmailAsync(destinatario, asunto, mensaje);
+          
+            mensajeConfirmacion = "¡Correo enviado con éxito!";
+        }
+        catch (Exception ex)
+        {
+            mensajeConfirmacion = $"Error al enviar el correo: {ex.Message}";
+        }
+    }
+}
 }
